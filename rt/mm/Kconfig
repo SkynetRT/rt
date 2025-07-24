@@ -1,0 +1,3 @@
+source "rt/mm/heap/Kconfig"
+source "rt/mm/map/Kconfig"
+

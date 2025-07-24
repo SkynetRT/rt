@@ -1,0 +1,2 @@
+source "rt/loader/binfmt/Kconfig"
+

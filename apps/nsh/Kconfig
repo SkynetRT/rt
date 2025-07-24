@@ -1,12 +1,7 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
-
-menu "NSH Library"
+menu "RTS Shell Application"
 
 config NSH_LIBRARY
-	bool "NSH Library"
+	bool "RTS Shell Application"
 	default n
 	select NETUTILS_NETLIB if NET
 	select BOARDCTL if (!NSH_DISABLE_MKRD && !DISABLE_MOUNTPOINT) || NSH_ARCHINIT

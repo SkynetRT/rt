@@ -1,0 +1,4 @@
+source "hal/cores/common/Kconfig"
+source "hal/cores/specific/Kconfig"
+
+

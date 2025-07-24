@@ -1,0 +1,5 @@
+comment "Applications:"
+
+source "apps/init/Kconfig"
+source "apps/nsh/Kconfig"
+source "apps/skynet/Kconfig"

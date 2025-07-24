@@ -1,0 +1,7 @@
+source "rt/sched/clock/Kconfig"
+source "rt/sched/irq/Kconfig"
+source "rt/sched/mqueue/Kconfig"
+source "rt/sched/pthread/Kconfig"
+source "rt/sched/sched/Kconfig"
+source "rt/sched/signal/Kconfig"
+source "rt/sched/vas/Kconfig"

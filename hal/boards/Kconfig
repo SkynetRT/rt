@@ -1,0 +1,3 @@
+source "hal/boards/common/Kconfig"
+source "hal/boards/specific/Kconfig"
+

@@ -1,0 +1,3 @@
+comment "Libraries:"
+source "libs/libc/Kconfig"
+source "libs/libm/Kconfig"

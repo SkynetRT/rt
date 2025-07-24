@@ -1,0 +1,4 @@
+comment "Hardware Abstraction Layer:"
+
+source "hal/cores/Kconfig"
+source "hal/boards/Kconfig"

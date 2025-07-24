@@ -1,0 +1,7 @@
+menu "RTS RT Crypto"
+
+source "rt/crypto/mbedtls/Kconfig"
+
+endmenu
+
+

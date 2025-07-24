@@ -1,0 +1,6 @@
+comment "File Systems:"
+
+source "fs/romfs/Kconfig"
+source "fs/binfs/Kconfig"
+source "fs/vfs/Kconfig"
+
