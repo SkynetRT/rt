@@ -1,0 +1,110 @@
+<html><head><meta charset="utf-8" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" /><meta name="author" content="Maxim Sokhatsky" /><title>RTS</title>
+    <link rel="stylesheet" href="https://n2o.dev/blank.css" />
+    <link rel="stylesheet" href="https://n2o.dev/zima.css" />
+    <link rel="stylesheet" href="https://n2o.dev/pro/pro.css" />
+</head><body><nav>
+    <a href="https://erp.uno/en/">ERP</a>
+    <a href="https://mq.erp.uno" style="background:#ededed;">RTS</a>
+</nav><header>
+    <a href="https://github.com/bitedits/rts"><img src="https://openmoji.org/data/color/svg/1F4DF.svg"/></a>
+    <h1>RTS</h1>
+</header><aside>
+    <article>
+        <section>
+            <h3>SYNOPSIS</h3>
+            <div>Synrc RTS is a specialized distribution of Apache NuttX RTOS tailored for needs of Synrc Skynet application, supporting a curated set of hardware platforms.
+            </div>
+            <div>
+               Synrc RTS is a lightweight fork of NuttX, optimized to support specific boards for real-time applications, while retains the core functionality of NuttX.
+            </div>
+        </section>
+        <section>
+            <h3>PLATFORMS</h3>
+            <div><ul><li>SIM</li>
+                     <li>QEMU</li>
+                     <li>CXD5602</li>
+                     <li>RP2040</li>
+                     <li>RP2350</li>
+                     <li>RK3399</li></ul></div>
+            <br />
+            <div>
+                JUN 2025 © 5HT ISC | VER 1.0
+            </div>
+        </section>
+        <section>
+        </section>
+    </article>
+</aside><main>
+
+    <section>
+        <a name="js"></a><h3>RTS</h3>
+
+        <p>QEMU</p>
+
+        <figure>
+        <code>
+ ./tools/configure qemu-armv7a:nsh
+ make menuconfig
+ make
+ qemu-system-arm -M virt -device loader,file=nuttx -nographic
+       </code>
+        </figure>
+
+       <p>SIM POSIX</p>
+
+        <figure>
+        <code>
+ ./tools/configure sim:nsh
+ make menuconfig
+ make
+ ./nuttx
+        </code>
+        </figure>
+
+        <br /><br />
+
+    </section>
+
+    <section>
+        <a name="js"></a><h3>CONFIG</h3>
+
+        <p>MENUCONFIG</p>
+
+        <figure>
+        <code>
+ $ kconfig-mconf Kconfig
+
+ *** Hardware Abstraction Layer: ***
+ RTS HAL Core Common  --->
+ RTS HAL Core Specific  --->
+ RTS HAL Board Common  --->
+ RTS HAL Board Specific  --->
+ *** Run-Time: ***
+ RTS RT Crypto  --->
+ RTS RT ELF/FLAT Binary Loader  --->
+ RTS RT Heap Manager  --->
+ RTS RT MMU  --->
+ RTS RT Scheduler Clock  --->
+ RTS RT Scheduler IRQ  --->
+ RTS RT Scheduler Queue  --->
+ RTS RT Scheduler Threads  --->
+ RTS RT Scheduler Algorithm  --->
+ RTS RT Scheduler Signal Management  --->
+ RTS RT Virtual Address Space  --->
+ *** Libraries: ***
+ RTS Kernel C Library  --->
+ RTS Kernel Mathematical Library  --->
+ *** Applications: ***
+ RTS Init Application  --->
+ RTS Shell Application  --->
+ RTS Skynet Application  --->
+        </code>
+        </figure>
+
+    </section>
+
+</main><footer>
+    Made with <span class="heart">❤</span> to Skynet/RTS
+</footer></body></html>
