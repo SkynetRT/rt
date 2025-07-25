@@ -45,24 +45,38 @@
 
         <p>QEMU</p>
 
+        <P><font size=3>Emulation.</font></p>
+
         <figure>
-        <code>
- ./tools/configure qemu-armv7a:nsh
- make menuconfig
- make
- qemu-system-arm -M virt -device loader,file=nuttx -nographic
-       </code>
+        <code>./tools/configure.sh qemu-armv7a:nsh
+kconfig-mconf Kconfig
+./tools/mkconfig . > include/nuttx/config.h
+make -j
+qemu-system-arm -M virt -device loader,file=nuttx -nographic</code>
         </figure>
 
        <p>SIM POSIX</p>
 
+        <P><font size=3>Simulation.</font></p>
+
         <figure>
-        <code>
- ./tools/configure sim:nsh
- make menuconfig
- make
- ./nuttx
-        </code>
+        <code>./tools/configure.sh sim:nsh
+kconfig-mconf Kconfig
+./tools/mkconfig . > include/nuttx/config.h
+make -j
+./nuttx </code>
+        </figure>
+
+       <p>PICO2 RP2350</p>
+
+        <P><font size=3>Bare Metal.</font></p>
+
+        <figure>
+        <code>./tools/configure.sh raspberrypi-pico-2:usbnsh
+kconfig-mconf Kconfig
+./tools/mkconfig . > include/nuttx/config.h
+make -j
+picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 </code>
         </figure>
 
         <br /><br />
@@ -72,39 +86,85 @@
     <section>
         <a name="js"></a><h3>CONFIG</h3>
 
-        <p>MENUCONFIG</p>
+        <p><font size=3>Configuration Menu.</font></p>
 
         <figure>
         <code>
  $ kconfig-mconf Kconfig
-
- *** Hardware Abstraction Layer: ***
- RTS HAL Core Common  --->
- RTS HAL Core Specific  --->
- RTS HAL Board Common  --->
- RTS HAL Board Specific  --->
- *** Run-Time: ***
- RTS RT Crypto  --->
- RTS RT ELF/FLAT Binary Loader  --->
- RTS RT Heap Manager  --->
- RTS RT MMU  --->
- RTS RT Scheduler Clock  --->
- RTS RT Scheduler IRQ  --->
- RTS RT Scheduler Queue  --->
- RTS RT Scheduler Threads  --->
- RTS RT Scheduler Algorithm  --->
- RTS RT Scheduler Signal Management  --->
- RTS RT Virtual Address Space  --->
- *** Libraries: ***
- RTS Kernel C Library  --->
- RTS Kernel Mathematical Library  --->
- *** Applications: ***
- RTS Init Application  --->
- RTS Shell Application  --->
- RTS Skynet Application  --->
         </code>
         </figure>
 
+
+<!--
+
+*** Hardware Abstraction Layer: ***
+RTS HAL Core Common  ---&gt;
+RTS HAL Core Specific  ---&gt;
+RTS HAL Board Common  ---&gt;
+RTS HAL Board Specific  ---&gt;
+*** Run-Time: ***
+RTS RT Crypto  ---&gt;
+RTS RT ELF/FLAT Binary Loader  ---&gt;
+RTS RT Heap Manager  ---&gt;
+RTS RT MMU  ---&gt;
+RTS RT Scheduler Clock  ---&gt;
+RTS RT Scheduler IRQ  ---&gt;
+RTS RT Scheduler Queue  ---&gt;
+RTS RT Scheduler Threads  ---&gt;
+RTS RT Scheduler Algorithm  ---&gt;
+RTS RT Scheduler Signal Management  ---&gt;
+RTS RT Virtual Address Space  ---&gt;
+*** Libraries: ***
+RTS Kernel C Library  ---&gt;
+RTS Kernel Mathematical Library  ---&gt;
+*** Applications: ***
+RTS Init Application  ---&gt;
+RTS Shell Application  ---&gt;
+RTS Skynet Application  ---&gt;
+
+-->
+        <br /><br />
+
+    </section>
+
+    <section>
+        <a name="hal"></a><h3>HAL</h3>
+        <p><font size=3>Hardware Abstraction Layer.</font></p>
+        <br /><br />
+    </section>
+
+    <section>
+        <a name="hal"></a><h3>RT</h3>
+        <p><font size=3>Operating System Run-Time.</font></p>
+        <br /><br />
+    </section>
+
+    <section>
+        <a name="hal"></a><h3>FS</h3>
+        <p><font size=3>File Systems.</font></p>
+        <p>
+        <a href="">ROMFS</a> &mdash; ROM File System for RTS Applications.<br>
+        <a href="">BINFS</a> &mdash; BIN File System for RTS Applications.
+        </p>
+        <br>
+    </section>
+
+    <section>
+        <a name="hal"></a><h3>DRIVERS</h3>
+        <p><font size=3>Device Drivers.</font></p>
+        <br /><br />
+    </section>
+
+    <section>
+        <a name="hal"></a><h3>LIBS</h3>
+        <p><font size=3>Libraries.</font></p>
+        <br /><br />
+    </section>
+
+    <section>
+        <a name="hal"></a><h3>APPS</h3>
+        <p><font size=3>Applications.</font></p>
+        <br /><br />
     </section>
 
 </main><footer>
