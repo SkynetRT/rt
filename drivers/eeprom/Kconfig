@@ -4,7 +4,7 @@
 #
 
 menuconfig EEPROM
-	bool "EEPROM support"
+	bool "EEPROM Driver"
 	default n
 	---help---
 		This directory holds implementations of EEPROM drivers.

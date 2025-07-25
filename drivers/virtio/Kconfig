@@ -4,7 +4,7 @@
 #
 
 menuconfig DRIVERS_VIRTIO
-	bool "Virtio Device Support"
+	bool "Virtio Device Driver"
 	select OPENAMP
 	default n
 

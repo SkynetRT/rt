@@ -3,6 +3,16 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
+menuconfig SERIAL
+	bool "UART Serial Communications Driver"
+	default y
+	---help---
+		Front-end character drivers for chip-specific UARTs.  This provide
+		some TTY-like functionality and are commonly used (but not required
+		for) the NuttX system console.  See also include/nuttx/serial/serial.h
+
+if SERIAL
+
 config ARCH_HAVE_SERIAL_TERMIOS
 	bool
 	default n
@@ -15,16 +25,6 @@ config ARCH_HAVE_8BIT_SERIAL_BUFSIZE
 	not support atomic 16-bit load/store instructions. Receive and transmit
 	buffer sizes are stored in uint8_t (instead of int16_t) variable
 	in such case.
-
-menuconfig SERIAL
-	bool "Serial Driver Support"
-	default y
-	---help---
-		Front-end character drivers for chip-specific UARTs.  This provide
-		some TTY-like functionality and are commonly used (but not required
-		for) the NuttX system console.  See also include/nuttx/serial/serial.h
-
-if SERIAL
 
 config SERIAL_PM_ACTIVITY_DOMAIN
 	int "PM activity domain"
@@ -111,7 +111,7 @@ menuconfig UART_PL011
 	default n
 
 if UART_PL011
-source "drivers/serial/Kconfig-pl011"
+source "drivers/uart/Kconfig-pl011"
 endif
 
 menuconfig CMSDK_UART
@@ -120,7 +120,7 @@ menuconfig CMSDK_UART
 	default n
 
 if CMSDK_UART
-source "drivers/serial/Kconfig-cmsdk"
+source "drivers/uart/Kconfig-cmsdk"
 endif # CMSDK_UART
 
 menuconfig 16550_UART
@@ -129,11 +129,11 @@ menuconfig 16550_UART
 	default n
 
 if 16550_UART
-source "drivers/serial/Kconfig-16550"
+source "drivers/uart/Kconfig-16550"
 endif
 
 if PCI
-source "drivers/serial/Kconfig-pci"
+source "drivers/uart/Kconfig-pci"
 endif
 
 #
@@ -777,10 +777,10 @@ config UART_RXDMA
 
 endmenu
 
-source "drivers/serial/Kconfig-uart"
-source "drivers/serial/Kconfig-lpuart"
-source "drivers/serial/Kconfig-usart"
-source "drivers/serial/Kconfig-sci"
+source "drivers/uart/Kconfig-uart"
+source "drivers/uart/Kconfig-lpuart"
+source "drivers/uart/Kconfig-usart"
+source "drivers/uart/Kconfig-sci"
 
 config RAM_UART
 	bool "RAM uart driver"

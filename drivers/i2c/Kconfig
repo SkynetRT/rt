@@ -12,7 +12,7 @@ config BOARD_HAVE_I2CMUX
 	default n
 
 menuconfig I2C
-	bool "I2C Driver Support"
+	bool "I2C Driver"
 	default n
 	---help---
 		This selection enables building of the "upper-half" I2C driver.

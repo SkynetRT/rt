@@ -4,7 +4,7 @@
 #
 
 menuconfig DEVICE_TREE
-	bool "Device Tree Support"
+	bool "Device Tree FDT Driver"
 	default n
 	select LIBC_FDT
 	---help---

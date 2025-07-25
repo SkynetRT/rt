@@ -4,7 +4,7 @@
 #
 
 menuconfig USBDEV
-	bool "USB Device Driver Support"
+	bool "USB Device Driver"
 	default n
 	---help---
 		USB device drivers.  See also include/nuttx/usb/usbdev.h
