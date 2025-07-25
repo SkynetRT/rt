@@ -1,9 +1,4 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
-
-comment "RP23XX Configuration Options"
+menu "RP2350 Core Specific"
 
 config RP23XX_RP2350B
 	bool "Use RP2350B variant (QFN-80)"
@@ -1059,3 +1054,5 @@ config RP23XX_BOARD_HAS_WS2812
 	---help---
 		See the Board Selection menu to configure the pins used
 		by ws2812.
+
+endmenu

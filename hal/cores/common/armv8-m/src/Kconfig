@@ -1,10 +1,3 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
-
-comment "ARMv8-M Configuration Options"
-
 config ARMV8M_HAVE_ICACHE
 	bool
 	default n
@@ -115,8 +108,6 @@ config ARMV8M_ITMSYSLOG
 		MCU support in order to be used.  See arch/arm/src/armv8-m/itm_syslog.h
 		for additional initialization information.
 
-if ARMV8M_ITMSYSLOG
-
 config ARMV8M_ITMSYSLOG_PORT
 	int "ITM SYSLOG Port"
 	default 0
@@ -126,8 +117,6 @@ config ARMV8M_ITMSYSLOG_SWODIV
 	int "ITM SYSLOG SWO divider"
 	default 15
 	range 1 8192
-
-endif # ARMV8M_ITMSYSLOG
 
 config ARMV8M_SYSTICK
 	bool "SysTick timer driver"

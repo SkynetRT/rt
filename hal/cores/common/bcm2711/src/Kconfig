@@ -1,18 +1,3 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
-
-if ARCH_CHIP_BCM2711
-
-comment "BCM2711 configuration options"
-
-#####################################################################
-# Peripheral selection
-#####################################################################
-
-menu "Broadcom BCM2711 Peripheral Selection"
-
 config BCM2711_LOW_PERIPHERAL
 	bool "BCM2711 Low Peripheral Mode"
 	default y
@@ -28,8 +13,6 @@ config BCM2711_I2C
 	select I2C
 	---help---
 		Support for I2C in master mode.
-
-if BCM2711_I2C
 
 config BCM2711_I2C0
 	bool "I2C0"
@@ -89,7 +72,6 @@ config BCM2711_I2C_DRIVER
 		for I2C bus transfers from application code. This driver is intended
 		for testing, not for use in any real driver application.
 
-endif # BCM2711_I2C
 
 #####################################################################
 # SPI Configuration
@@ -101,16 +83,12 @@ config BCM2711_SPI
 	---help---
 		Support for SPI interfaces.
 
-if BCM2711_SPI
-
 config BCM2711_SPI0
 	bool "SPI0"
 	depends on BCM2711_SPI
 	default n
 	---help---
 		Enable the SPI0 interface.
-
-if BCM2711_SPI0
 
 config BCM2711_SPI0_CE0
 	int "CE0 GPIO"
@@ -146,8 +124,6 @@ config BCM2711_SPI0_SCLK
 	default 11
 	---help---
 		The GPIO pin for the SCLK signal (11, 39, 42)
-
-endif
 
 config BCM2711_SPI1
 	bool "SPI1"
@@ -190,8 +166,3 @@ config BCM2711_SPI6
 	---help---
 		Enable the SPI6 interface.
 
-endif # BCM2711_SPI
-
-endmenu # Broadcom BCM2711 Peripheral Selection
-
-endif # ARCH_CHIP_BCM2711

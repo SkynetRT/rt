@@ -1,11 +1,4 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
-
-if ARCH_CHIP_QEMU
-
-menu "Qemu Virt Chip Selection"
+menu "QEMU Virt"
 
 choice
 	prompt "Qemu Core Configuration"
@@ -47,4 +40,3 @@ config ARCH_CHIP_QEMU_WITH_HV
 
 endmenu # "Qemu Chip Selection"
 
-endif # ARCH_CHIP_QEMU

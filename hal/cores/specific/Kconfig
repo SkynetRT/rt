@@ -1,4 +1,4 @@
 menu "RTS HAL Core Specific"
+source "hal/cores/specific/qemu/src/Kconfig"
+source "hal/cores/specific/rp2350/src/Kconfig"
 endmenu
-
-
