@@ -3,6 +3,8 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
+menu "VFS"
+
 config EVENT_FD
 	bool "EventFD"
 	default n
@@ -98,3 +100,6 @@ config FS_BACKTRACE_SKIP
 	depends on FS_BACKTRACE > 0
 	---help---
 		Skip depth of backtrace.
+
+endmenu
+
