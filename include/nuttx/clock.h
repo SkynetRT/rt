@@ -58,6 +58,8 @@
  *    global variables or not.  In that case we have to assume not.
  */
 
+#define CLOCK_MAX UINT32_MAX
+
 #undef __HAVE_KERNEL_GLOBALS
 #if defined(CONFIG_SCHED_TICKLESS)
   /* Case 1: There is no global timer data */
