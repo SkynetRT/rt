@@ -67,7 +67,7 @@ int nxsem_trywait_slow(FAR sem_t *sem)
   bool mutex = NXSEM_IS_MUTEX(sem);
   FAR atomic_t *val = mutex ? NXSEM_MHOLDER(sem) : NXSEM_COUNT(sem);
   int32_t old;
-  int32_t new;
+  int32_t new = 0;
 
   /* The following operations must be performed with interrupts disabled
    * because sem_post() may be called from an interrupt handler.
