@@ -1,8 +1,9 @@
 comment "Device Drivers:"
 
 source "drivers/fdt/Kconfig"
+source "drivers/pci/Kconfig"
+source "drivers/uart/Kconfig"
 source "drivers/eeprom/Kconfig"
 source "drivers/i2c/Kconfig"
-source "drivers/pci/Kconfig"
-source "drivers/usb/Kconfig"
-source "drivers/uart/Kconfig"
+source "drivers/usbdev/Kconfig"
+source "drivers/usbhost/Kconfig"

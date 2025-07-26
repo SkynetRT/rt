@@ -1,5 +1,6 @@
 comment "Run-Time:"
+
 source "rt/crypto/Kconfig"
 source "rt/loader/Kconfig"
 source "rt/mm/Kconfig"
-source "rt/sched/Kconfig"
+source "rt/scheduler/Kconfig"

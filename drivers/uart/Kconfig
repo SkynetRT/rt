@@ -4,7 +4,7 @@
 #
 
 menuconfig SERIAL
-	bool "UART Serial Communications Driver"
+	bool "UART Serial Driver"
 	default y
 	---help---
 		Front-end character drivers for chip-specific UARTs.  This provide
