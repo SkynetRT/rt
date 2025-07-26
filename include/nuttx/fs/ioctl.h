@@ -30,6 +30,7 @@
 #include <nuttx/config.h>
 
 #include <stdbool.h>
+#include <limits.h>
 #include <sys/types.h>
 
 /****************************************************************************

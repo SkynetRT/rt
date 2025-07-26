@@ -102,6 +102,16 @@
 
 #ifndef __ASSEMBLY__
 
+typedef __SIZE_TYPE__ _size_t;
+typedef __PTRDIFF_TYPE__ _ssize_t;
+typedef __WCHAR_TYPE__ _wchar_t;
+typedef uint64_t _uint64_t;
+typedef _uint64_t irqstate_t;
+
+typedef int _wint_t;
+typedef int _wctype_t;
+
+
 /* Misc. scalar types */
 
 /* mode_t is an integer type used for file attributes.  mode_t needs
