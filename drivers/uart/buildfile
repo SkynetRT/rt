@@ -1,0 +1,8 @@
+project = uart
+
+obj{uart}: cxx{*.c *.cpp}
+{
+  cflags = -Wall -O2 -mcpu=cortex-m33
+  cxxflags = $cflags
+  cxx.poptions += -I$path(../../include)
+}
