@@ -106,6 +106,20 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
         <a href="">BOARDS</a> &mdash; I/O Board Abstractions.<br>
         <a href="">CORES</a> &mdash; CPU Abstractions.
         </p>
+        <p><font size=3>Cores.</font></p>
+        <p>
+        <a href="">ARMV8-M</a> &mdash; Sony Spresense (common).<br>
+        <a href="">BCM2711</a> &mdash; Raspberry Pi Pico 2 (common).<br>
+        <a href="">QEMU</a> &mdash; QEMU Virtio (specific).<br>
+        <a href="">RP2350</a> &mdash; Raspberry Pi RP2350 CPU (specific).
+        </p>
+        <p><font size=3>Boards.</font></p>
+        <p>
+        <a href="">CXD56XX</a> &mdash; Sony Spresense (common).<br>
+        <a href="">PICO2</a> &mdash; Raspberry Pi Pico 2 (specific).<br>
+        <a href="">RP2350</a> &mdash; Raspberry Pi RP2350 (common).<br>
+        <a href="">SIM</a> &mdash; Simlation (specific).
+        </p>
         <br /><br />
     </section>
 
@@ -113,12 +127,32 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
         <a name="hal"></a><h3>RT</h3>
         <p><font size=3>Operating System Run-Time.</font></p>
         <p>
-        <a href="">IRQ</a> &mdash; Interrupts.<br>
-        <a href="">QUE</a> &mdash; Message Queues.<br>
-        <a href="">SCH</a> &mdash; Scheduler.<br>
-        <a href="">THR</a> &mdash; POSIX Threads.<br>
-        <a href="">SEM</a> &mdash; Semaphores.<br>
-        <a href="">TSK</a> &mdash; Virtual Address Spaces.
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/loader">LDR</a> &mdash; ELF/FLAT Binary Loader.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/clock">CLK</a> &mdash; Clocks and Counters.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/irq">IRQ</a> &mdash; Interrupts.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/signal">SIG</a> &mdash; Signaling System.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/timer">TIM</a> &mdash; Timers.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/scheduler">SCH</a> &mdash; Scheduler.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/mm">SMM</a> &mdash; Shared Memory Manager.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/mqueue">QUE</a> &mdash; Message Queues.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/thread">THR</a> &mdash; Threads.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/semaphore">SEM</a> &mdash; Semaphores.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/rt/task">TSK</a> &mdash; Virtual Address Spaces.
+        </p>
+        <br /><br />
+    </section>
+
+    <section>
+        <a name="hal"></a><h3>DRIVERS</h3>
+        <p><font size=3>Device Drivers.</font></p>
+        <p>
+        <a href="">EEPROM</a> &mdash; EEPROM Access.<br>
+        <a href="">FDT</a> &mdash; Flattened Device Tree.<br>
+        <a href="">I2C</a> &mdash; I2C Bus.<br>
+        <a href="">PCI</a> &mdash; PCI/PCIe Bus.<br>
+        <a href="">USBDEV</a> &mdash; USB Device Driver.<br>
+        <a href="">USBHOST</a> &mdash; USB Host Driver.<br>
+        <a href="">UART</a> &mdash; UART Serial Driver.<br>
         </p>
         <br /><br />
     </section>
@@ -127,28 +161,31 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
         <a name="hal"></a><h3>FS</h3>
         <p><font size=3>File Systems.</font></p>
         <p>
-        <a href="">Virtual</a> &mdash; File System (/).<br>
-        <a href="">ROM</a> &mdash; File System (/etc).<br>
-        <a href="">BIN</a> &mdash; File System (/bin).
+        <a href="https://github.com/SkynetRT/kernel/tree/main/fs/vfs">Virtual</a> &mdash; File System (/).<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/fs/romfs">ROM</a> &mdash; File System (/etc).<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/fs/binfs">BIN</a> &mdash; File System (/bin).
         </p>
         <br>
     </section>
 
     <section>
-        <a name="hal"></a><h3>DRIVERS</h3>
-        <p><font size=3>Device Drivers.</font></p>
-        <br /><br />
-    </section>
-
-    <section>
         <a name="hal"></a><h3>LIBS</h3>
         <p><font size=3>Libraries.</font></p>
+        <p>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/libs/libc">LIBC</a> &mdash; C Run-Time Library.<br>
+        <a href="https://github.com/SkynetRT/kernel/tree/main/libs/libm">LIBM</a> &mdash; Mathematical Library.
+        </p>
         <br /><br />
     </section>
 
     <section>
         <a name="hal"></a><h3>APPS</h3>
         <p><font size=3>Applications.</font></p>
+        <p>
+        <a href="">INIT</a> &mdash; RTS Init Supervisor.<br>
+        <a href="">SH</a> &mdash; POSIX Verified Shell.<br>
+        <a href="">SKYNET</a> &mdash; Skynet Application.
+        </p>
         <br /><br />
     </section>
 
