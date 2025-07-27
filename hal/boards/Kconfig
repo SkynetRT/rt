@@ -3838,7 +3838,7 @@ config ARCH_IRQBUTTONS
 comment "Board-Specific Options"
 
 if ARCH_BOARD_SIM
-source "hal/boards/specific/sim/Kconfig"
+source "hal/boards/sim/Kconfig"
 endif
 
 choice
@@ -4138,6 +4138,19 @@ config BOARD_MEMORY_RANGE
 
 endmenu
 
-source "hal/boards/common/Kconfig"
-source "hal/boards/specific/Kconfig"
+menu "RTS HAL Board Common"
+menu "Sony Spresense"
+source "hal/boards/cxd56xx/src/Kconfig"
+endmenu
+menu "RP2350"
+source "hal/boards/rp2350/src/Kconfig"
+endmenu
+endmenu
+
+menu "RTS HAL Board Specific"
+menu "Simulator"
+source "hal/boards/sim/Kconfig"
+endmenu
+endmenu
+
 

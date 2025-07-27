@@ -1451,7 +1451,19 @@ endmenu # Boot Memory Configuration
 
 endmenu
 
-source "hal/cores/common/Kconfig"
-source "hal/cores/specific/Kconfig"
+menu "RTS HAL Core Common"
+menu "ARMv8-M"
+source "hal/cores/armv8-m/src/Kconfig"
+endmenu
+menu "BCM2711"
+source "hal/cores/bcm2711/src/Kconfig"
+endmenu
+endmenu
+
+menu "RTS HAL Core Specific"
+source "hal/cores/qemu/src/Kconfig"
+source "hal/cores/rp2350/src/Kconfig"
+endmenu
+
 
 

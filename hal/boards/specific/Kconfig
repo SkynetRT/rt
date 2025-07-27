@@ -1,5 +1,0 @@
-menu "RTS HAL Board Specific"
-menu "Simulator"
-source "hal/boards/specific/sim/Kconfig"
-endmenu
-endmenu

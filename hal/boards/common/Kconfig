@@ -1,8 +1,0 @@
-menu "RTS HAL Board Common"
-menu "Sony Spresense"
-source "hal/boards/common/cxd56xx/src/Kconfig"
-endmenu
-menu "RP2350"
-source "hal/boards/common/rp2350/src/Kconfig"
-endmenu
-endmenu
