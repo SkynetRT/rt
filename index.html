@@ -101,12 +101,24 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
     <section>
         <a name="hal"></a><h3>HAL</h3>
         <p><font size=3>Hardware Abstraction Layer.</font></p>
+        <p>
+        <a href="">BIOS</a> &mdash; I/O Board Abstraction.<br>
+        <a href="">CORE</a> &mdash; CPU Abstraction.
+        </p>
         <br /><br />
     </section>
 
     <section>
         <a name="hal"></a><h3>RT</h3>
         <p><font size=3>Operating System Run-Time.</font></p>
+        <p>
+        <a href="">IRQ</a> &mdash; Interrupts.<br>
+        <a href="">QUE</a> &mdash; Message Queues.<br>
+        <a href="">SCH</a> &mdash; Scheduler.<br>
+        <a href="">THR</a> &mdash; POSIX Threads.<br>
+        <a href="">SEM</a> &mdash; Semaphores.<br>
+        <a href="">TSK</a> &mdash; Virtual Address Spaces.
+        </p>
         <br /><br />
     </section>
 
@@ -114,8 +126,9 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
         <a name="hal"></a><h3>FS</h3>
         <p><font size=3>File Systems.</font></p>
         <p>
-        <a href="">ROMFS</a> &mdash; ROM File System for RTS Applications.<br>
-        <a href="">BINFS</a> &mdash; BIN File System for RTS Applications.
+        <a href="">Virtual</a> &mdash; File System (/).<br>
+        <a href="">ROM</a> &mdash; File System (/etc).<br>
+        <a href="">BIN</a> &mdash; File System (/bin).
         </p>
         <br>
     </section>
