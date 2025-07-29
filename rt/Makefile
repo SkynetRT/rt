@@ -1,6 +1,6 @@
 AR = arm-none-eabi-ar
-SUBDIRS := clock semaphore timer irq
-LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a
+SUBDIRS := clock semaphore timer irq env
+LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a
 BUILD := ../build
 TARGET := $(BUILD)/libraries/rt.a
 BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS))
