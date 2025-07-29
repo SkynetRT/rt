@@ -8,7 +8,6 @@ BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS))
 .PHONY: $(LIBS)
 all: $(TARGET)
 $(TARGET): $(LIBS)
-	@echo $(BLIBS)
 	@for lib in $(BLIBS); do $(AR) -x $$lib; mv *.o $(BUILD)/objects; done
 	$(AR) rcs $@ $(BUILD)/objects/*.o
 $(LIBS):
