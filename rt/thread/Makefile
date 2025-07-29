@@ -1,8 +1,4 @@
-AR = arm-none-eabi-ar
-CC = arm-none-eabi-gcc
-ARM32	= -march=armv7-a -mthumb -mfloat-abi=hard -mfpu=vfpv4
-ARM64	= -march=armv8-a
-CFLAGS	= $(ARM32) -Wall -I../../include -nostdinc
+include ../../Make.defs
 OBJS := pthread_condsignal.o pthread_findjoininfo.o pthread_mutexconsistent.o pthread_mutexunlock.o pthread_sigmask.o \
 	pthread_cancel.o pthread_condwait.o pthread_getaffinity.o pthread_mutexdestroy.o pthread_release.o \
 	pthread_completejoin.o pthread_create.o pthread_getschedparam.o pthread_mutexinit.o pthread_setaffinity.o \

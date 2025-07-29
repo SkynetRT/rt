@@ -1,4 +1,4 @@
-AR = arm-none-eabi-ar
+include ../Make.defs
 SUBDIRS := clock semaphore timer irq env signal mqueue task thread crypto
 LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a \
 	signal/signal.a mqueue/mqueue.a task/task.a thread/thread.a crypto/nuttx/crypto.a

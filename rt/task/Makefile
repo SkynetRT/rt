@@ -1,8 +1,4 @@
-AR = arm-none-eabi-ar
-CC = arm-none-eabi-gcc
-ARM32	= -march=armv7-a -mthumb -mfloat-abi=hard -mfpu=vfpv4
-ARM64	= -march=armv8-a
-CFLAGS	= $(ARM32) -Wall -I../../include -nostdinc
+include ../../Make.defs
 OBJS := exit.o task_create.o task_exithook.o task_getppid.o task_join.o task_reparent.o task_spawnparms.o tls_dupinfo.o \
 	task_activate.o task_delete.o task_fork.o task_gettid.o task_posixspawn.o task_restart.o task_start.o tls_initinfo.o \
 	task_argvstr.o task_execve.o task_getgroup.o task_init.o task_prctl.o task_setup.o task_terminate.o \
