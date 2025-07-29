@@ -11,7 +11,7 @@ $(TARGET): $(LIBS)
 	@for lib in $(BLIBS); do $(AR) -x $$lib; mv *.o $(BUILD)/objects; done
 	$(AR) rcs $@ $(BUILD)/objects/*.o
 $(LIBS):
-	@mkdir -p $(BUILD)/libraries $(BUILD)/objects $(BUILD)/binaries
+	@mkdir -p $(BUILD)/libraries $(BUILD)/objects
 	$(MAKE) -C $(dir $@)
 	mv $(dir $@)/*.o $(BUILD)/objects
 	mv $(dir $@)/*.a $(BUILD)/libraries
