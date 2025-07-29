@@ -31,6 +31,8 @@
  * Included Files
  ****************************************************************************/
 
+#include <stddef.h>
+
 #include <arch/setjmp.h>
 #include <sys/types.h>
 #ifndef __ASSEMBLY__

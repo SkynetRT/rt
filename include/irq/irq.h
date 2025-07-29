@@ -1,5 +1,5 @@
 /****************************************************************************
- * sched/irq/irq.h
+4 * sched/irq/irq.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *

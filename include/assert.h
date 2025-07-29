@@ -23,6 +23,8 @@
 #ifndef __INCLUDE_ASSERT_H
 #define __INCLUDE_ASSERT_H
 
+#include <stddef.h>
+
 #ifndef __ASSEMBLY__
 
 /****************************************************************************

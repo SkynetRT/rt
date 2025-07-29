@@ -26,9 +26,17 @@
 
 #include <nuttx/config.h>
 
+#include <stddef.h>
+#include <errno.h>
+#include <stdio.h>
 #include <assert.h>
 
+#include <nuttx/arch.h>
+#include <nuttx/irq.h>
+#include <nuttx/kthread.h>
+
 #include "irq/irq.h"
+#include "sched/sched.h"
 
 /****************************************************************************
  * Private Types
