@@ -2,7 +2,7 @@ AR = arm-none-eabi-ar
 CC = arm-none-eabi-gcc
 ARM32	= -march=armv7-a -mthumb -mfloat-abi=hard -mfpu=vfpv4
 ARM64	= -march=armv8-a
-CFLAGS	= $(ARM64) -Wall -I../../include -nostdinc
+CFLAGS	= $(ARM32) -Wall -I../../include -nostdinc
 OBJS := sig_deliver.o sig_lowest.o sig_ppoll.o sig_releasependingsignal.o sig_timedwait.o \
 	sig_action.o sig_dispatch.o sig_nanosleep.o sig_procmask.o sig_removependingsignal.o sig_unmaskpendingsignal.o \
 	sig_allocpendingsigaction.o sig_findaction.o sig_notification.o sig_pselect.o sig_sleep.o sig_usleep.o \

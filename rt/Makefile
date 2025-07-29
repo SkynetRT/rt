@@ -1,6 +1,7 @@
 AR = arm-none-eabi-ar
 SUBDIRS := clock semaphore timer irq env signal mqueue task thread crypto
-LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a signal/signal.a mqueue/mqueue.a task/task.a thread/thread.a crypto/nuttx/crypto.a
+LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a \
+	signal/signal.a mqueue/mqueue.a task/task.a thread/thread.a crypto/nuttx/crypto.a
 BUILD := ../build
 TARGET := $(BUILD)/libraries/rt.a
 BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS))
