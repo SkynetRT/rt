@@ -9,6 +9,7 @@
 #define CONFIG_m 2
 
 /* General Definitions ***********************************/
+#define CONFIG_CRYPTO_RANDOM_POOL 1
 #define CONFIG_LIBC_STDDEF 1
 #define CONFIG_LIBC_LIMITS 1
 #define CONFIG_LIBC_STDDEF 1
