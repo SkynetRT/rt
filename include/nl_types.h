@@ -1,5 +1,5 @@
 /****************************************************************************
- * sched/task/task.h
+ * include/nl_types.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,8 +20,8 @@
  *
  ****************************************************************************/
 
-#ifndef __SCHED_TASK_TASK_H
-#define __SCHED_TASK_TASK_H
+#ifndef __INCLUDE_NL_TYPES_H
+#define __INCLUDE_NL_TYPES_H
 
 /****************************************************************************
  * Included Files
@@ -30,50 +30,39 @@
 #include <nuttx/config.h>
 #include <nuttx/compiler.h>
 
-#include <sys/types.h>
-#include <stdbool.h>
+/****************************************************************************
+ * Pre-processor Definitions
+ ****************************************************************************/
 
-#include <nuttx/sched.h>
+#define NL_SETD       1
+#define NL_CAT_LOCALE 1
+
+/****************************************************************************
+ * Public Type Definitions
+ ****************************************************************************/
+
+typedef int       nl_item;
+typedef FAR void *nl_catd;
 
 /****************************************************************************
  * Public Function Prototypes
  ****************************************************************************/
 
-struct tcb_s; /* Forward reference */
-
-/* Task start-up */
-
-void nxtask_start(void);
-int nxtask_setup_stackargs(FAR struct task_tcb_s *tcb,
-                           FAR const char *name,
-                           FAR char * const argv[]);
-int nxtask_setup_scheduler(FAR struct task_tcb_s *tcb, int priority,
-                           start_t start, main_t main, uint8_t ttype);
-#if CONFIG_TASK_NAME_SIZE > 0
-void nxtask_setup_name(FAR struct task_tcb_s *tcb, FAR const char *name);
+#ifdef __cplusplus
+#define EXTERN extern "C"
+extern "C"
+{
 #else
-#  define nxtask_setup_name(tcb, name)
+#define EXTERN extern
 #endif
 
-/* Task exit */
+nl_catd catopen(FAR const char *name, int oflag);
+FAR char *catgets(nl_catd catd, int set_id, int msg_id, FAR const char *s);
+int catclose(nl_catd catd);
 
-int  nxtask_exit(void);
-int  nxtask_terminate(pid_t pid);
-void nxtask_exithook(FAR struct tcb_s *tcb, int status);
-void nxtask_recover(FAR struct tcb_s *tcb);
-
-/* Cancellation points */
-
-bool nxnotify_cancellation(FAR struct tcb_s *tcb);
-
-/* Task Join */
-
-#ifndef CONFIG_DISABLE_PTHREAD
-void nxtask_joininit(FAR struct tcb_s *tcb);
-void nxtask_joindestroy(FAR struct tcb_s *tcb);
-#else
-#  define nxtask_joininit(tcb)
-#  define nxtask_joindestroy(tcb)
+#undef EXTERN
+#ifdef __cplusplus
+}
 #endif
 
-#endif /* __SCHED_TASK_TASK_H */
+#endif /* __INCLUDE_NL_TYPES_H */
