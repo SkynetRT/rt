@@ -90,9 +90,7 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
         <p><font size=3>Configuration Menu using <b>kconfig</b>.</font></p>
 
         <figure>
-        <code>
- $ kconfig-mconf Kconfig
-        </code>
+        <code> $ kconfig-mconf Kconfig        </code>
         </figure>
 
         <figure>
@@ -112,13 +110,11 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
            for CHIPS and BOARDS supported by RTS.</font></p>
 
         <figure>
-        <code>
-rts/
+        <code>rts/
 ├── include/
 │   ├── arch/
 │   │   ├── [chip]/
-│   │   └── [board]/
-        </code>
+│   │   └── [board]/        </code>
         </figure>
 
         <p>CHIPS</p>
@@ -127,14 +123,13 @@ rts/
            GPIO, I2C, SPI, UART and Timer harware definition for SoC built-ins.</font></p>
 
         <p>
-        <a href="">ARMV7-A</a> &mdash; ARMv7-A 32-bit Profile (common).<br>
-        <a href="">ARMV8-M</a> &mdash; ARMv8-M 32-bit MCU Profile (common).<br>
-        <a href="">BCM2711</a> &mdash; Broadcom BCM2711 (common).<br>
+        <a href="">ARMV7-A</a> &mdash; ARMv7-A 32-bit Profile.<br>
+        <a href="">ARMV8-M</a> &mdash; ARMv8-M 32-bit MCU Profile.<br>
+        <a href="">BCM2711</a> &mdash; Broadcom BCM2711.<br>
         </p>
 
         <figure>
-        <code>
-rts/
+        <code>rts/
 ├── hal/
 │   ├── chips/
 │   │   └── [chip]/
@@ -146,8 +141,7 @@ rts/
 │   │           ├── spi/
 │   │           ├── uart/
 │   │           ├── timer/
-│   │           └── misc/
-        </code>
+│   │           └── misc/        </code>
         </figure>
 
         <p>BOARDS</p>
@@ -157,15 +151,14 @@ rts/
            Sensors and Power hardware board facilities.</font></p>
 
         <p>
-        <a href="">CXD56XX</a> &mdash; Sony Spresense (common).<br>
-        <a href="">PICO2</a> &mdash; Raspberry Pi Pico 2 (specific).<br>
-        <a href="">VIRTIO</a> &mdash; QEMU Virtio (specific).<br>
-        <a href="">SIM</a> &mdash; Simulation (specific).
+        <a href="">CXD56XX</a> &mdash; Sony Spresense.<br>
+        <a href="">PICO2</a> &mdash; Raspberry Pi Pico 2.<br>
+        <a href="">VIRTIO</a> &mdash; QEMU Virtio.<br>
+        <a href="">SIM</a> &mdash; Simulation.
         </p>
 
         <figure>
-        <code>
-rts/
+        <code>rts/
 ├── hal/
 │   ├── boards/
 │   │   └── [board]/
@@ -181,8 +174,7 @@ rts/
 │   │           ├── pwm/
 │   │           ├── adc/
 │   │           ├── sensors/
-│   │           └── power/
-        </code>
+│   │           └── power/        </code>
         </figure>
 
         <br /><br />
