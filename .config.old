@@ -164,6 +164,27 @@ CONFIG_FLASH_SIZE=0
 # CONFIG_ARMV7M_ITMSYSLOG is not set
 
 #
+# ARMv8-A
+#
+
+#
+# Allwinner A64 Peripheral Selection
+#
+# CONFIG_A64_DE is not set
+# CONFIG_A64_MIPI_DSI is not set
+# CONFIG_A64_RSB is not set
+# CONFIG_A64_TCON0 is not set
+# CONFIG_A64_RTWI is not set
+# CONFIG_A64_TWI0 is not set
+# CONFIG_A64_TWI1 is not set
+# CONFIG_A64_TWI2 is not set
+# CONFIG_A64_UART is not set
+# CONFIG_A64_UART1 is not set
+# CONFIG_A64_UART2 is not set
+# CONFIG_A64_UART3 is not set
+# CONFIG_A64_UART4 is not set
+
+#
 # ARMv8-M
 #
 # CONFIG_ARMV8M_HAVE_ICACHE is not set
