@@ -105,19 +105,88 @@ picotool uf2 convert nuttx.bin nuttx.uf2 --family absolute --offset 0x10000000 <
 
     <section>
         <a name="hal"></a><h3>HAL</h3>
-        <p><font size=3>Hardware Abstraction Layer. Cores.</font></p>
+
+        <p>Hardware Abstraction Layer</p>
+
+        <p><font size=3>HAL defines set of include files
+           for CHIPS and BOARDS supported by RTS.</font></p>
+
+        <figure>
+        <code>
+rts/
+├── include/
+│   ├── arch/
+│   │   ├── [chip]/
+│   │   └── [board]/
+        </code>
+        </figure>
+
+        <p>CHIPS</p>
+
+        <p><font size=3>CHIPS folder fefines hardware abstractions for CPU or SoC which include
+           GPIO, I2C, SPI, UART and Timer harware definition for SoC built-ins.</font></p>
+
         <p>
         <a href="">ARMV7-A</a> &mdash; ARMv7-A 32-bit Profile (common).<br>
         <a href="">ARMV8-M</a> &mdash; ARMv8-M 32-bit MCU Profile (common).<br>
         <a href="">BCM2711</a> &mdash; Broadcom BCM2711 (common).<br>
         </p>
-        <p><font size=3>Boards.</font></p>
+
+        <figure>
+        <code>
+rts/
+├── hal/
+│   ├── chips/
+│   │   └── [chip]/
+│   │       ├── cpu/
+│   │       ├── mmu/
+│   │       └── drivers/
+│   │           ├── gpio/
+│   │           ├── i2c/
+│   │           ├── spi/
+│   │           ├── uart/
+│   │           ├── timer/
+│   │           └── misc/
+│   └── boards/
+        </code>
+        </figure>
+
+        <p>BOARDS</p>
+
+        <p><font size=3>BOARDS folder fefines hardware abstractions for I/O Boards where SoC is placed.
+           Thus the BOARD primitives include by inheritance all CHIP primitives plus Boot, PWM, ADC,
+           Sensors and Power hardware board facilities.</font></p>
+
         <p>
         <a href="">CXD56XX</a> &mdash; Sony Spresense (common).<br>
         <a href="">PICO2</a> &mdash; Raspberry Pi Pico 2 (specific).<br>
         <a href="">VIRTIO</a> &mdash; QEMU Virtio (specific).<br>
         <a href="">SIM</a> &mdash; Simulation (specific).
         </p>
+
+        <figure>
+        <code>
+rts/
+├── hal/
+│   ├── boards/
+│   │   └── [board]/
+│   │       ├── init/
+│   │       ├── linker/
+│   │       └── drivers/
+│   │           ├── gpio/
+│   │           ├── i2c/
+│   │           ├── spi/
+│   │           ├── uart/
+│   │           ├── timer/
+│   │           ├── misc/
+│   │           ├── pwm/
+│   │           ├── adc/
+│   │           ├── sensors/
+│   │           └── power/
+│   └── chips/
+        </code>
+        </figure>
+
         <br /><br />
     </section>
 

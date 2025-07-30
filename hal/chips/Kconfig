@@ -1,4 +1,4 @@
-menu "RTS HAL Cores Configuration"
+menu "RTS HAL Chips Configuration"
 
 choice
 	prompt "CPU Architecture"
@@ -1451,12 +1451,18 @@ endmenu # Boot Memory Configuration
 
 endmenu
 
-menu "RTS HAL Cores"
+menu "RTS HAL Chips"
+menu "ARMv7-M"
+source "hal/chips/armv7-m/Kconfig"
+endmenu
 menu "ARMv7-A"
 source "hal/chips/armv7-a/Kconfig"
 endmenu
 menu "ARMv8-M"
 source "hal/chips/armv8-m/Kconfig"
+endmenu
+menu "Allwinner A64"
+source "hal/chips/a64/Kconfig"
 endmenu
 menu "BCM2711"
 source "hal/chips/bcm2711/Kconfig"
