@@ -1,4 +1,4 @@
-menu "RTS HAL Core General Configuration"
+menu "RTS HAL Cores Configuration"
 
 choice
 	prompt "CPU Architecture"
@@ -1451,19 +1451,18 @@ endmenu # Boot Memory Configuration
 
 endmenu
 
-menu "RTS HAL Core Common"
+menu "RTS HAL Cores"
+menu "ARMv7-A"
+source "hal/cores/armv7-a/Kconfig"
+endmenu
 menu "ARMv8-M"
-source "hal/cores/armv8-m/src/Kconfig"
+source "hal/cores/armv8-m/Kconfig"
 endmenu
 menu "BCM2711"
-source "hal/cores/bcm2711/src/Kconfig"
+source "hal/cores/bcm2711/Kconfig"
 endmenu
 endmenu
 
-menu "RTS HAL Core Specific"
-source "hal/cores/qemu/src/Kconfig"
-source "hal/cores/rp2350/src/Kconfig"
-endmenu
 
 
 

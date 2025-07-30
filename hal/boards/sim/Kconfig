@@ -3,6 +3,8 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
+menu "Simulator (POSIX)"
+
 config EXAMPLES_TOUCHSCREEN_BGCOLOR
 	hex "Background color for apps/examples/touchscreen"
 	default 0x007b68ee
@@ -69,3 +71,5 @@ config SIM_CANDEV_SOCK_IDX
 		Host SocketCAN network interface used by simulated SocketCAN
 
 # endif
+
+endmenu
