@@ -13,7 +13,7 @@ $(TARGET): $(LIBS)
 $(LIBS):
 	@mkdir -p $(BUILD)/libraries $(BUILD)/objects
 	$(MAKE) -C $(dir $@)
-	mv $(dir $@)/*.o $(BUILD)/objects
-	mv $(dir $@)/*.a $(BUILD)/libraries
+	mv $(dir $@)*.o $(BUILD)/objects
+	mv $(dir $@)*.a $(BUILD)/libraries
 clean:
 	$(RM) -r $(BUILD)
