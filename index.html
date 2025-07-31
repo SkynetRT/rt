@@ -46,9 +46,9 @@
            See <a href="https://raw.githubusercontent.com/SkynetRT/kernel/refs/heads/main/NOTICE">NOTICE</a> message
            and <a href="https://raw.githubusercontent.com/SkynetRT/kernel/refs/heads/main/HISTORY">HISTORY</a> changelog.</p>
 
-        <p>QEMU</p>
+        <p>Emulation</p>
 
-        <P><font size=3>Emulation.</font></p>
+        <P><font size=3>Execute RT binary using QEMU.</font></p>
 
         <figure>
         <code>./tools/configure.sh qemu-armv7a:nsh
@@ -58,9 +58,9 @@ make -j
 qemu-system-arm -M virt -device loader,file=nuttx -nographic</code>
         </figure>
 
-       <p>SIM POSIX</p>
+       <p>Simulation</p>
 
-        <P><font size=3>Simulation.</font></p>
+        <P><font size=3>Run RT as POSIX Application.</font></p>
 
         <figure>
         <code>./tools/configure.sh sim:nsh
@@ -70,9 +70,9 @@ make -j
 ./nuttx </code>
         </figure>
 
-       <p>PICO2 RP2350</p>
+       <p>Bare Metal</p>
 
-        <P><font size=3>Bare Metal.</font></p>
+        <P><font size=3>Run RT on Bare Metal like Raspberry Pi Pico 2 (RP2350).</font></p>
 
         <figure>
         <code>./tools/configure.sh raspberrypi-pico-2:usbnsh
