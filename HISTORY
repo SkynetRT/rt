@@ -1,5 +1,5 @@
 2025-07-20 Imported and Resorted in new tree: https://gist.github.com/5HT/987739e27e19106811984c5a3e124d49
-2025-07-25 Resorted Kconfig: https://github.com/SkynetRT/kernel
+2025-07-25 Resorted Kconfig: https://github.com/SkynetRT/rt
 2025-07-26 Compiled first RT module: semaphore
 2025-07-30 Compiled almost full RT: clock, timer, irq, env, signal, mqueue, task, thread, crypto
 2026-07-31 HAL Spec Definition (CHIPS/BOARDS). New compiled RT module: sched
