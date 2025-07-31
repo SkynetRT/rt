@@ -1,4 +1,4 @@
-menu "RTS HAL Chips Configuration"
+menu "Chips Configuration"
 
 choice
 	prompt "CPU Architecture"
@@ -1451,7 +1451,7 @@ endmenu # Boot Memory Configuration
 
 endmenu
 
-menu "RTS HAL Chips"
+menu "Chips Selection"
 menu "ARMv7-M"
 source "hal/chips/armv7-m/Kconfig"
 endmenu

@@ -1,9 +1,6 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
+menu "QEMU Virtio Device Driver"
 
-menuconfig DRIVERS_VIRTIO
+config DRIVERS_VIRTIO
 	bool "Virtio Device Driver"
 	select OPENAMP
 	default n
@@ -122,3 +119,5 @@ config DRIVERS_VIRTIO_SND_BUFFER_COUNT
 endif
 
 endif # DRIVERS_VIRTIO
+
+endmenu

@@ -1,7 +1,7 @@
-menu "RTS RT Crypto"
+menu "Crypto"
 
-source "rt/crypto/mbedtls/Kconfig"
-source "rt/crypto/nuttx/Kconfig"
+source "kernel/crypto/mbedtls/Kconfig"
+source "kernel/crypto/nuttx/Kconfig"
 
 endmenu
 

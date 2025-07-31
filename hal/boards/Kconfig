@@ -1,4 +1,4 @@
-menu "RTS HAL Boards Configuration"
+menu "Boards Configuration"
 
 choice
 	prompt "Select target board"
@@ -4138,7 +4138,7 @@ config BOARD_MEMORY_RANGE
 
 endmenu
 
-menu "RTS HAL Boards"
+menu "Boards Selection"
 
 source "hal/boards/spresense/Kconfig"
 source "hal/boards/pico2/Kconfig"

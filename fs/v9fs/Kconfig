@@ -1,7 +1,4 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
+menu "Plan 9 File System (V9FS)"
 
 config FS_V9FS
 	bool "V9FS file system"
@@ -27,3 +24,5 @@ config V9FS_SOCKET_9P
 	default n
 
 endif
+
+endmenu

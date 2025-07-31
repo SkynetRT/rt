@@ -1,5 +1,5 @@
 choice
-	prompt "RTS Matematical Library"
+	prompt "Mathematical Library"
 	default LIBM_NONE if DEFAULT_SMALL
 	default LIBM_TOOLCHAIN if !DEFAULT_SMALL
 

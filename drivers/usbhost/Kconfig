@@ -1,13 +1,10 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
+menu "USB Host Driver"
 
 config USBHOST_HAVE_ASYNCH
 	bool
 	default n
 
-menuconfig USBHOST
+config USBHOST
 	bool "USB Host Driver"
 	default n
 	---help---
@@ -772,3 +769,5 @@ config USBHOST_XHCI_MAX_DEVS
 endif # USBHOST_XHCI_PCI
 
 endif # USBHOST
+
+endmenu

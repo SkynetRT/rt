@@ -1,11 +1,10 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
+menu "Flat Device Tree"
 
-menuconfig DEVICE_TREE
+config DEVICE_TREE
 	bool "Device Tree FDT Driver"
-	default n
+	default y
 	select LIBC_FDT
 	---help---
 		Interface for interacting with devicetree.
+
+endmenu

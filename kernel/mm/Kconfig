@@ -3,7 +3,7 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
-menu "RTS RT Memory Manager"
+menu "Memory Manager"
 
 choice
 	prompt "Build heap manager"

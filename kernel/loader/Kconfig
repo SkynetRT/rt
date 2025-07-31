@@ -3,7 +3,7 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
-menu "RTS RT ELF/FLAT Binary Loader"
+menu "ELF/FLAT Binary Loader"
 
 config BINFMT_DISABLE
 	bool "Disable BINFMT support"

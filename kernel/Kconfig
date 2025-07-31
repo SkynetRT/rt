@@ -1,6 +1,6 @@
-comment "Run-Time:"
+comment "Kernel:"
 
-source "rt/crypto/Kconfig"
-source "rt/loader/Kconfig"
-source "rt/mm/Kconfig"
-source "rt/scheduler/Kconfig"
+source "kernel/crypto/Kconfig"
+source "kernel/loader/Kconfig"
+source "kernel/mm/Kconfig"
+source "kernel/sched/Kconfig"

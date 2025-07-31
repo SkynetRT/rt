@@ -1,7 +1,4 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
+menu "ROM File System (ROMFS)"
 
 config FS_ROMFS
 	bool "ROMFS file system"
@@ -35,3 +32,5 @@ config FS_ROMFS_WRITEABLE
 		Enable write extended feature in romfs
 
 endif
+
+endmenu

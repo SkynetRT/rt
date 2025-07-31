@@ -5,11 +5,9 @@
 
 config LIBC_FDT
 	bool "Flattened Device Tree Library"
-	default n
+	default y
 	---help---
 		Enable or disable Flattened Device Tree Library features.
-
-if LIBC_FDT
 
 config LIBC_FDT_DTC_VERSION
 	string "LIBC FDT DTC Version"
@@ -17,4 +15,3 @@ config LIBC_FDT_DTC_VERSION
 	---help---
 		Version of DTC source code to download from github.
 
-endif # LIBC_FDT

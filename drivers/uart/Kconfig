@@ -3,7 +3,9 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
-menuconfig SERIAL
+menu "UART Serial Driver"
+
+config SERIAL
 	bool "UART Serial Driver"
 	default y
 	---help---
@@ -959,3 +961,5 @@ config UART_BTH5_NPOLLWAITERS
 endif # UART_BTH5
 
 endif # SERIAL
+
+endmenu

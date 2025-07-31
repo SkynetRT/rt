@@ -3,6 +3,8 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
+menu "I2C Device Driver"
+
 config ARCH_HAVE_I2CRESET
 	bool
 	default n
@@ -11,7 +13,7 @@ config BOARD_HAVE_I2CMUX
 	bool
 	default n
 
-menuconfig I2C
+config I2C
 	bool "I2C Driver"
 	default n
 	---help---
@@ -146,3 +148,5 @@ config I2CMULTIPLEXER_TCA9548A
 endmenu # I2C Multiplexer Support
 
 endif
+
+endmenu

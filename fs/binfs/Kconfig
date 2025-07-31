@@ -1,7 +1,4 @@
-#
-# For a description of the syntax of this configuration file,
-# see the file kconfig-language.txt in the NuttX tools repository.
-#
+menu "Binary File System (BINFS)"
 
 config FS_BINFS
 	bool "BINFS File System"
@@ -17,3 +14,5 @@ config FS_BINFS
 		If the BINFS BINFMT loader is also enabled, then the builtin applications
 		can be executed through the normal mechanisms (posix_spawn(), exev(), etc.)
 
+
+endmenu

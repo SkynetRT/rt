@@ -1,4 +1,4 @@
-menu "RTS Shell Application"
+menu "Shell Application"
 
 config NSH_LIBRARY
 	bool "RTS Shell Application"

@@ -1,4 +1,4 @@
-menu "RTS C Library"
+menu "C Library"
 
 source "libs/libc/fdt/Kconfig"
 source "libs/libc/stdio/Kconfig"
