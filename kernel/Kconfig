@@ -2,5 +2,5 @@ comment "Kernel:"
 
 source "kernel/crypto/Kconfig"
 source "kernel/loader/Kconfig"
-source "kernel/mm/Kconfig"
+source "kernel/mem/Kconfig"
 source "kernel/sched/Kconfig"
