@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Skynet ARM32/ARM64 Real-Time System (RTS)
+# Skynet ARM32/ARM64 Real-Time Operating System
 #
 
 #
@@ -332,6 +332,10 @@ CONFIG_ARCH_CHIP_QEMU_A53=y
 #
 # Kernel:
 #
+
+#
+# Crypto Engine
+#
 CONFIG_CRYPTO=y
 # CONFIG_CRYPTO_AES is not set
 # CONFIG_CRYPTO_ALGTEST is not set
@@ -341,10 +345,11 @@ CONFIG_CRYPTO=y
 # ELF/FLAT Binary Loader
 #
 # CONFIG_BINFMT_DISABLE is not set
-# CONFIG_BINFMT_LOADABLE is not set
-# CONFIG_PIC is not set
-# CONFIG_NXFLAT is not set
-# CONFIG_ELF is not set
+CONFIG_BINFMT_LOADABLE=y
+CONFIG_PIC=y
+CONFIG_NXFLAT=y
+CONFIG_ELF=y
+CONFIG_ELF_STACKSIZE=2048
 CONFIG_BINFMT_ELF_RELOCATABLE=y
 
 #
@@ -373,12 +378,7 @@ CONFIG_GRAN_INTR=y
 #
 # Scheduler
 #
-CONFIG_DISABLE_OS_API=y
-# CONFIG_DISABLE_POSIX_TIMERS is not set
-# CONFIG_DISABLE_PTHREAD is not set
-# CONFIG_DISABLE_MQUEUE is not set
-# CONFIG_DISABLE_MQUEUE_SYSV is not set
-# CONFIG_DISABLE_ENVIRON is not set
+# CONFIG_DISABLE_OS_API is not set
 # CONFIG_DISABLE_IDLE_LOOP is not set
 
 #

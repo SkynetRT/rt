@@ -3,7 +3,7 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
-menu "Scheduler"
+menu "POSIX Microkernel"
 
 menuconfig DISABLE_OS_API
 	bool "Disable NuttX interfaces"
