@@ -1,5 +1,5 @@
 /****************************************************************************
- * mm/mm_heap/mm_checkcorruption.c
+ * include/execinfo.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,59 +20,67 @@
  *
  ****************************************************************************/
 
+#ifndef __INCLUDE_EXECINFO_H
+#define __INCLUDE_EXECINFO_H
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
-#include <nuttx/config.h>
+#include <nuttx/sched.h>
 
 #include <assert.h>
-#include <sched.h>
-
-#include <nuttx/arch.h>
-#include <nuttx/mm/mm.h>
-#include <nuttx/irq.h>
-
-#include "mm.h"
+#include <stdio.h>
+#include <sys/types.h>
 
 /****************************************************************************
- * Private Functions
+ * Pre-processor Definitions
  ****************************************************************************/
 
-static void checkcorruption_handler(FAR struct mm_allocnode_s *node,
-                                    FAR void *arg)
+/* 3: ' 0x' prefix */
+
+#define BACKTRACE_PTR_FMT_WIDTH  ((int)sizeof(uintptr_t) * 2 + 3)
+
+/* Buffer size needed to hold formatted `depth` backtraces */
+
+#define BACKTRACE_BUFFER_SIZE(d) (BACKTRACE_PTR_FMT_WIDTH * (d) + 1)
+
+#define backtrace(b, s) sched_backtrace(_SCHED_GETTID(), b, s, 0)
+#define dump_stack()    sched_dumpstack(_SCHED_GETTID())
+
+/****************************************************************************
+ * Public Function Prototypes
+ ****************************************************************************/
+
+#undef EXTERN
+#if defined(__cplusplus)
+#define EXTERN extern "C"
+extern "C"
 {
-  size_t nodesize = MM_SIZEOF_NODE(node);
+#else
+#define EXTERN extern
+#endif
 
-  if (MM_NODE_IS_ALLOC(node))
-    {
-      ASSERT(nodesize >= MM_SIZEOF_ALLOCNODE);
-    }
-  else
-    {
-      FAR struct mm_freenode_s *fnode = (FAR void *)node;
+FAR char **backtrace_symbols(FAR void *const *buffer, int size);
+void backtrace_symbols_fd(FAR void *const *buffer, int size, int fd);
+int backtrace_format(FAR char *buffer, int size,
+                     FAR void *backtrace[], int depth);
 
-      ASSERT(nodesize >= MM_MIN_CHUNK);
-      ASSERT(fnode->blink->flink == fnode);
-      ASSERT(MM_SIZEOF_NODE(fnode->blink) <= nodesize);
-      ASSERT(fnode->flink == NULL ||
-             fnode->flink->blink == fnode);
-      ASSERT(fnode->flink == NULL ||
-             MM_SIZEOF_NODE(fnode->flink) == 0 ||
-             MM_SIZEOF_NODE(fnode->flink) >= nodesize);
-    }
+#  if CONFIG_LIBC_BACKTRACE_BUFFSIZE > 0
+int backtrace_record(int skip);
+int backtrace_remove(int index);
+FAR void **backtrace_get(int index, FAR int *size);
+void backtrace_dump(void);
+#  else
+#    define backtrace_record(skip) (-ENOSYS)
+#    define backtrace_remove(index) (-ENOSYS)
+#    define backtrace_get(index, size) (*(size)=0)
+#    define backtrace_dump()
+#  endif
+
+#undef EXTERN
+#if defined(__cplusplus)
 }
+#endif
 
-/****************************************************************************
- * Public Functions
- ****************************************************************************/
-
-/****************************************************************************
- * Name: mm_checkcorruption
- *
- * Description:
- *   mm_checkcorruption is used to check whether memory heap is normal.
- *
- ****************************************************************************/
-
-// void mm_checkcorruption(FAR struct mm_heap_s *heap) { mm_foreach(heap, checkcorruption_handler, NULL); }
+#endif /* __INCLUDE_EXECINFO_H */

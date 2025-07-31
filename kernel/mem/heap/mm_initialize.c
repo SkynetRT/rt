@@ -34,7 +34,7 @@
 #include <nuttx/mm/mm.h>
 #include <nuttx/mm/kasan.h>
 
-#include "mm_heap/mm.h"
+#include "mm.h"
 
 /****************************************************************************
  * Pre-processor Definitions

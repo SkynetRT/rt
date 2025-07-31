@@ -1,19 +1,18 @@
-include ../Make.defs
-SUBDIRS := clock semaphore timer irq env signal mqueue task thread crypto sched
-LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a \
-	signal/signal.a mqueue/mqueue.a task/task.a thread/thread.a crypto/crypto.a sched/sched.a
-BUILD := ../build
+include ../../Make.defs
+SUBDIRS := heap
+LIBS := heap/heap.a
+BUILD := ../../build
 TARGET := $(BUILD)/libraries/mem.a
 BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS))
 .PHONY: $(LIBS)
 all: $(TARGET)
 $(TARGET): $(LIBS)
-	@for lib in $(BLIBS); do $(AR) -x $$lib; mv *.o $(BUILD)/objects; done
-	$(AR) rcs $@ $(BUILD)/objects/*.o
+	@for lib in $(BLIBS); do $(AR) -x $$lib; mv *.o $(BUILD)/mem; done
+	$(AR) rcs $@ $(BUILD)/mem/*.o
 $(LIBS):
-	@mkdir -p $(BUILD)/libraries $(BUILD)/objects
+	@mkdir -p $(BUILD)/libraries $(BUILD)/mem
 	$(MAKE) -C $(dir $@)
-	mv $(dir $@)*.o $(BUILD)/objects
+	mv $(dir $@)*.o $(BUILD)/mem
 	mv $(dir $@)*.a $(BUILD)/libraries
 clean:
 	$(RM) -r $(BUILD)

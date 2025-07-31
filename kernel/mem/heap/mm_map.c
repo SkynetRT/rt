@@ -36,6 +36,8 @@
 
 #include "sched/sched.h"
 
+#define ARCH_SHM_SIZE (64 * 4096)
+
 #if defined(CONFIG_BUILD_FLAT) || defined(__KERNEL__)
 
 /****************************************************************************

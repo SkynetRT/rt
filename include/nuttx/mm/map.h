@@ -76,6 +76,8 @@ struct mm_map_entry_s
 
 /* memory mapping structure for the task group */
 
+typedef void *GRAN_HANDLE;
+
 struct mm_map_s
 {
   sq_queue_t mm_map_sq;         /* mappings list */

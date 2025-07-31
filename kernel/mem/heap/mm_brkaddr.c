@@ -30,7 +30,7 @@
 
 #include <nuttx/mm/mm.h>
 
-#include "mm_heap/mm.h"
+#include "mm.h"
 
 /****************************************************************************
  * Public Functions
