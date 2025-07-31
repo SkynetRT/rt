@@ -1,4 +1,4 @@
-mainmenu "Skynet ARM32/ARM64 Real-Time System (RTS)"
+mainmenu "Skynet ARM32/ARM64 Real-Time Operating System"
 
 source "hal/Kconfig"
 source "kernel/Kconfig"

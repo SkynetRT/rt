@@ -1,17 +1,15 @@
 include ../Make.defs
-SUBDIRS := clock semaphore timer irq env signal mqueue task thread crypto sched loader
+SUBDIRS := clock semaphore timer irq env signal mqueue task thread crypto sched
 LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a \
 	signal/signal.a mqueue/mqueue.a task/task.a thread/thread.a crypto/crypto.a sched/sched.a
 BUILD := ../build
-TARGET := $(BUILD)/libraries/kernel.a
+TARGET := $(BUILD)/libraries/mem.a
 BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS))
 .PHONY: $(LIBS)
 all: $(TARGET)
-$(TARGET): $(LIBS) libraries/loader.a
+$(TARGET): $(LIBS)
 	@for lib in $(BLIBS); do $(AR) -x $$lib; mv *.o $(BUILD)/objects; done
 	$(AR) rcs $@ $(BUILD)/objects/*.o
-libraries/loader.a:
-	$(MAKE) -C loader
 $(LIBS):
 	@mkdir -p $(BUILD)/libraries $(BUILD)/objects
 	$(MAKE) -C $(dir $@)

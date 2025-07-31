@@ -1,5 +1,5 @@
 /****************************************************************************
- * binfmt/binfmt.h
+ * include/nuttx/binfmt/binfmt.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,8 +20,8 @@
  *
  ****************************************************************************/
 
-#ifndef __BINFMT_BINFMT_H
-#define __BINFMT_BINFMT_H
+#ifndef __INCLUDE_NUTTX_BINFMT_BINFMT_H
+#define __INCLUDE_NUTTX_BINFMT_BINFMT_H
 
 /****************************************************************************
  * Included Files
@@ -29,197 +29,136 @@
 
 #include <nuttx/config.h>
 
-#include <nuttx/binfmt/binfmt.h>
+#include <spawn.h>
+#include <sys/types.h>
+
+#include <nuttx/sched.h>
+#include <nuttx/lib/elf.h>
 
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
 
+#define BINFMT_NALLOC     4
+
+/****************************************************************************
+ * Public Types
+ ****************************************************************************/
+
+/* The type of one C++ constructor or destructor */
+
+typedef CODE void (*binfmt_ctor_t)(void);
+typedef CODE void (*binfmt_dtor_t)(void);
+
+/* This describes the file to be loaded.
+ *
+ * NOTE 1: The 'filename' must be the full, absolute path to the file to be
+ * executed unless CONFIG_LIBC_ENVPATH is defined.  In that case,
+ * 'filename' may be a relative path; a set of candidate absolute paths
+ * will be generated using the PATH environment variable and load_module()
+ * will attempt to load each file that is found at those absolute paths.
+ */
+
+struct symtab_s;
+struct binary_s
+{
+  /* Information provided from the loader (if successful) describing the
+   * resources used by the loaded module.
+   */
+
+  main_t entrypt;                      /* Entry point into a program module */
+  FAR void *mapped;                    /* Memory-mapped, address space */
+
+#ifdef CONFIG_LIBC_ELF
+  struct module_s mod;                 /* Module context */
+#endif
+
+#ifdef CONFIG_PIC
+  FAR void *picbase;                   /* Position-independent */
+#endif
+
+#ifdef CONFIG_ARCH_ADDRENV
+  /* Address environment.
+   *
+   * addrenv - This is the handle created by addrenv_allocate() that can be
+   *   used to manage the tasks address space.
+   */
+
+  FAR addrenv_t *addrenv;              /* Address environment */
+  FAR addrenv_t *oldenv;               /* Saved address environment */
+#endif
+
+  size_t mapsize;                      /* Size of the mapped address region (needed for munmap) */
+
+  /* Start-up information that is provided by the loader, but may be modified
+   * by the caller between load_module() and exec_module() calls.
+   */
+
+  uint8_t priority;                    /* Task execution priority */
+  size_t stacksize;                    /* Size of the stack in bytes (unallocated) */
+#ifdef CONFIG_SCHED_USER_IDENTITY
+  uid_t uid;                           /* File owner user identity */
+  gid_t gid;                           /* File owner group user identity */
+  int mode;                            /* File mode added to */
+#endif
+
+#ifndef CONFIG_BUILD_KERNEL
+  FAR void *stackaddr;                 /* Task stack address */
+#endif
+
+  /* Unload module callback */
+
+  CODE int (*unload)(FAR struct binary_s *bin);
+};
+
+/* This describes one binary format handler */
+
+struct binfmt_s
+{
+  /* Supports a singly-linked list */
+
+  FAR struct binfmt_s *next;
+
+  /* Verify and load binary into memory */
+
+  CODE int (*load)(FAR struct binary_s *bin,
+                   FAR const char *filename,
+                   FAR const struct symtab_s *exports,
+                   int nexports);
+
+  /* Unload module callback */
+
+  CODE int (*unload)(FAR struct binary_s *bin);
+};
+
 /****************************************************************************
  * Public Data
  ****************************************************************************/
 
-#undef EXTERN
 #if defined(__cplusplus)
-#define EXTERN extern "C"
 extern "C"
 {
-#else
-#define EXTERN extern
 #endif
-
-/* This is a list of registered handlers for different binary formats.
- * This list should only be accessed by normal user programs.  It should be
- * sufficient protection to simply disable pre-emption when accessing this
- * list.
- */
-
-EXTERN FAR struct binfmt_s *g_binfmts;
 
 /****************************************************************************
  * Public Function Prototypes
  ****************************************************************************/
 
 /****************************************************************************
- * Name: binfmt_dumpmodule
+ * Name: binfmt_initialize
  *
  * Description:
- *   Dump the contents of struct binary_s.
- *
- * Input Parameters:
- *   bin      - Load structure
- *
- * Returned Value:
- *   Zero (OK) on success; a negated errno value on failure
+ *   initialize binfmt subsystem
  *
  ****************************************************************************/
 
-#if defined(CONFIG_DEBUG_FEATURES) && defined(CONFIG_DEBUG_BINFMT)
-int binfmt_dumpmodule(FAR const struct binary_s *bin);
-#else
-#  define binfmt_dumpmodule(bin)
-#endif
+void binfmt_initialize(void);
 
 /****************************************************************************
- * Name: binfmt_copyargv
+ * Name: register_binfmt
  *
  * Description:
- *   In the kernel build, the argv list will likely lie in the caller's
- *   address environment and, hence, be inaccessible when we switch to the
- *   address environment of the new process address environment.  So we
- *   do not have any real option other than to copy the callers argv[] list.
- *
- * Input Parameters:
- *   argv     - Argument list
- *
- * Returned Value:
- *   A non-zero copy is returned on success.
- *
- ****************************************************************************/
-
-#if defined(CONFIG_ARCH_ADDRENV) && defined(CONFIG_BUILD_KERNEL)
-int binfmt_copyargv(FAR char * const **copy, FAR char * const *argv);
-#else
-#  define binfmt_copyargv(copy, argv) (*(copy) = (argv), 0)
-#endif
-
-/****************************************************************************
- * Name: binfmt_freeargv
- *
- * Description:
- *   Release the copied argv[] list.
- *
- * Input Parameters:
- *   argv     - Argument list
- *
- * Returned Value:
- *   None
- *
- ****************************************************************************/
-
-#if defined(CONFIG_ARCH_ADDRENV) && defined(CONFIG_BUILD_KERNEL)
-void binfmt_freeargv(FAR char * const *argv);
-#else
-#  define binfmt_freeargv(argv)
-#endif
-
-/****************************************************************************
- * Name: binfmt_copyenv
- *
- * Description:
- *   In the kernel build, the environment exists in the parent's address
- *   environment and, hence, will be inaccessible when we switch to the
- *   address environment of the new process. So we do not have any real
- *   option other than to copy the parents envp list into an intermediate
- *   buffer that resides in neutral kernel memory.
- *
- * Input Parameters:
- *   envp     - Allocated environment strings
- *
- * Returned Value:
- *   A non-zero copy is returned on success.
- *
- ****************************************************************************/
-
-#ifndef CONFIG_DISABLE_ENVIRON
-#  define binfmt_copyenv(copy, envp) binfmt_copyargv(copy, envp)
-#else
-#  define binfmt_copyenv(copy, envp) (*(copy) = (envp), 0)
-#endif
-
-/****************************************************************************
- * Name: binfmt_freeenv
- *
- * Description:
- *   Release the copied envp[] list.
- *
- * Input Parameters:
- *   envp     - Allocated environment strings
- *
- * Returned Value:
- *   None
- *
- ****************************************************************************/
-
-#ifndef CONFIG_DISABLE_ENVIRON
-#  define binfmt_freeenv(envp) binfmt_freeargv(envp)
-#else
-#  define binfmt_freeenv(envp)
-#endif
-
-/****************************************************************************
- * Name: binfmt_copyactions
- *
- * Description:
- *   In the kernel build, the file actions will likely lie in the caller's
- *   address environment and, hence, be inaccessible when we switch to the
- *   address environment of the new process address environment.  So we
- *   do not have any real option other than to copy the callers action list.
- *
- * Input Parameters:
- *   copy     - Pointer of the copied output file actions
- *   actions  - Pointer of file actions to be copy
- *
- * Returned Value:
- *   A non-zero copy is returned on success.
- *
- ****************************************************************************/
-
-#if defined(CONFIG_ARCH_ADDRENV) && defined(CONFIG_BUILD_KERNEL)
-int binfmt_copyactions(FAR const posix_spawn_file_actions_t **copy,
-                       FAR const posix_spawn_file_actions_t *actions);
-#else
-#  define binfmt_copyactions(copy, actp) \
-          (*(copy) = (FAR posix_spawn_file_actions_t *)(actp), 0)
-#endif
-
-/****************************************************************************
- * Name: binfmt_freeactions
- *
- * Description:
- *   Release the copied file action list.
- *
- * Input Parameters:
- *   copy     - Pointer of file actions
- *
- * Returned Value:
- *   None
- *
- ****************************************************************************/
-
-#if defined(CONFIG_ARCH_ADDRENV) && defined(CONFIG_BUILD_KERNEL)
-void binfmt_freeactions(FAR const posix_spawn_file_actions_t *copy);
-#else
-#  define binfmt_freeactions(copy)
-#endif
-
-#ifdef CONFIG_BUILTIN
-/****************************************************************************
- * Name: builtin_initialize
- *
- * Description:
- *   In order to use the builtin binary format, this function must be called
- *   during system initialize to register the builtin binary format.
+ *   Register a loader for a binary format
  *
  * Returned Value:
  *   This is a NuttX internal function so it follows the convention that
@@ -228,29 +167,13 @@ void binfmt_freeactions(FAR const posix_spawn_file_actions_t *copy);
  *
  ****************************************************************************/
 
-int builtin_initialize(void);
+int register_binfmt(FAR struct binfmt_s *binfmt);
 
 /****************************************************************************
- * Name: builtin_uninitialize
+ * Name: unregister_binfmt
  *
  * Description:
- *   Unregister the builtin binary loader
- *
- * Returned Value:
- *   None
- *
- ****************************************************************************/
-
-void builtin_uninitialize(void);
-#endif
-
-#ifdef CONFIG_ELF
-/****************************************************************************
- * Name: elf_initialize
- *
- * Description:
- *   In order to use the ELF binary format, this function must be called
- *   during system initialization to register the ELF binary format.
+ *   Register a loader for a binary format
  *
  * Returned Value:
  *   This is a NuttX internal function so it follows the convention that
@@ -259,30 +182,14 @@ void builtin_uninitialize(void);
  *
  ****************************************************************************/
 
-int elf_initialize(void);
+int unregister_binfmt(FAR struct binfmt_s *binfmt);
 
 /****************************************************************************
- * Name: elf_uninitialize
+ * Name: load_module
  *
  * Description:
- *   Unregister the ELF binary loader
- *
- * Returned Value:
- *   None
- *
- ****************************************************************************/
-
-void elf_uninitialize(void);
-#endif
-
-#ifdef CONFIG_NXFLAT
-/****************************************************************************
- * Name: nxflat_initialize
- *
- * Description:
- *   In order to use the NxFLAT binary format, this function must be called
- *   during system initialization to register the NXFLAT binary
- *   format.
+ *   Load a module into memory, bind it to an exported symbol take, and
+ *   prep the module for execution.
  *
  * Returned Value:
  *   This is a NuttX internal function so it follows the convention that
@@ -291,20 +198,175 @@ void elf_uninitialize(void);
  *
  ****************************************************************************/
 
-int nxflat_initialize(void);
+int load_module(FAR struct binary_s *bin, FAR const char *filename,
+                FAR const struct symtab_s *exports, int nexports);
 
 /****************************************************************************
- * Name: nxflat_uninitialize
+ * Name: unload_module
  *
  * Description:
- *   Unregister the NXFLAT binary loader
+ *   Unload a (non-executing) module from memory.  If the module has
+ *   been started (via exec_module) and has not exited, calling this will
+ *   be fatal.
+ *
+ *   However, this function must be called after the module exist.  How
+ *   this is done is up to your logic.  Perhaps you register it to be
+ *   called by on_exit()?
  *
  * Returned Value:
- *   None
+ *   This is a NuttX internal function so it follows the convention that
+ *   0 (OK) is returned on success and a negated errno is returned on
+ *   failure.
  *
  ****************************************************************************/
 
-void nxflat_uninitialize(void);
+int unload_module(FAR struct binary_s *bin);
+
+/****************************************************************************
+ * Name: exec_module
+ *
+ * Description:
+ *   Execute a module that has been loaded into memory by load_module().
+ *
+ * Returned Value:
+ *   This is a NuttX internal function so it follows the convention that
+ *   0 (OK) is returned on success and a negated errno is returned on
+ *   failure.
+ *
+ ****************************************************************************/
+
+int exec_module(FAR struct binary_s *binp,
+                FAR const char *filename, FAR char * const *argv,
+                FAR char * const *envp,
+                FAR const posix_spawn_file_actions_t *actions,
+                FAR const posix_spawnattr_t *attr,
+                bool spawn);
+
+/****************************************************************************
+ * Name: exec
+ *
+ * Description:
+ *   This is a convenience function that wraps load_ and exec_module into
+ *   one call.  If CONFIG_BINFMT_LOADABLE is defined, this function will
+ *   schedule to unload the module when task exits.
+ *
+ *   This non-standard, NuttX function is similar to execv() and
+ *   posix_spawn() but differs in the following ways;
+ *
+ *   - Unlike execv() and posix_spawn() this function accepts symbol table
+ *     information as input parameters. This means that the symbol table
+ *     used to link the application prior to execution is provided by the
+ *     caller, not by the system.
+ *   - Unlike execv(), this function always returns.
+ *
+ *   This non-standard interface is included as a official NuttX API only
+ *   because it is needed in certain build modes: exec() is probably the
+ *   only want to load programs in the PROTECTED mode. Other file execution
+ *   APIs rely on a symbol table provided by the OS. In the PROTECTED build
+ *   mode, the OS cannot provide any meaningful symbolic information for
+ *   execution of code in the user-space blob so that is the exec() function
+ *   is really needed in that build case
+ *
+ *   The interface is available in the FLAT build mode although it is not
+ *   really necessary in that case. It is currently used by some example
+ *   code under the apps/ that that generate their own symbol tables for
+ *   linking test programs. So although it is not necessary, it can still
+ *   be useful.
+ *
+ *   The interface would be completely useless and will not be supported in
+ *   in the KERNEL build mode where the contrary is true: An application
+ *   process cannot provide any meaning symbolic information for use in
+ *   linking a different process.
+ *
+ *   NOTE: This function is flawed and useless without CONFIG_BINFMT_LOADABLE
+ *   because without that features there is then no mechanism to unload the
+ *   module once it exits.
+ *
+ * Input Parameters:
+ *   filename - The path to the program to be executed. If
+ *              CONFIG_LIBC_ENVPATH is defined in the configuration, then
+ *              this may be a relative path from the current working
+ *              directory. Otherwise, path must be the absolute path to the
+ *              program.
+ *   argv     - A pointer to an array of string arguments. The end of the
+ *              array is indicated with a NULL entry.
+ *   envp     - An array of character pointers to null-terminated strings
+ *              that provide the environment for the new process image.
+ *              The environment array is terminated by a null pointer.
+ *   exports  - The address of the start of the caller-provided symbol
+ *              table. This symbol table contains the addresses of symbols
+ *              exported by the caller and made available for linking the
+ *              module into the system.
+ *   nexports - The number of symbols in the exports table.
+ *
+ * Returned Value:
+ *   It returns the PID of the exec'ed module.  On failure, it returns
+ *   the negative errno value appropriately.
+ *
+ ****************************************************************************/
+
+int exec(FAR const char *filename, FAR char * const *argv,
+         FAR char * const *envp, FAR const struct symtab_s *exports,
+         int nexports);
+
+/****************************************************************************
+ * Name: exec_spawn
+ *
+ * Description:
+ *   exec() configurable version, delivery the spawn attribute if this
+ *   process has special customization.
+ *
+ * Input Parameters:
+ *   filename - The path to the program to be executed. If
+ *              CONFIG_LIBC_ENVPATH is defined in the configuration, then
+ *              this may be a relative path from the current working
+ *              directory. Otherwise, path must be the absolute path to the
+ *              program.
+ *   argv     - A pointer to an array of string arguments. The end of the
+ *              array is indicated with a NULL entry.
+ *   envp     - A pointer to an array of environment strings. Terminated with
+ *              a NULL entry.
+ *   exports  - The address of the start of the caller-provided symbol
+ *              table. This symbol table contains the addresses of symbols
+ *              exported by the caller and made available for linking the
+ *              module into the system.
+ *   nexports - The number of symbols in the exports table.
+ *   actions  - The spawn file actions
+ *   attr     - The spawn attributes.
+ *
+ * Returned Value:
+ *   This is an end-user function, so it follows the normal convention:
+ *   It returns the PID of the exec'ed module.  On failure, it returns
+ *   -1 (ERROR) and sets errno appropriately.
+ *
+ ****************************************************************************/
+
+int exec_spawn(FAR const char *filename, FAR char * const *argv,
+               FAR char * const *envp, FAR const struct symtab_s *exports,
+               int nexports, FAR const posix_spawn_file_actions_t *actions,
+               FAR const posix_spawnattr_t *attr);
+
+/****************************************************************************
+ * Name: binfmt_exit
+ *
+ * Description:
+ *   This function may be called when a tasked loaded into RAM exits.
+ *   This function will unload the module when the task exits and reclaim
+ *   all resources used by the module.
+ *
+ * Input Parameters:
+ *   bin - This structure must have been allocated with kmm_malloc() and must
+ *         persist until the task unloads
+ *
+ * Returned Value:
+ *   This is a NuttX internal function so it follows the convention that
+ *   0 (OK) is returned on success and a negated errno is returned on
+ *   failure.
+ *
+ ****************************************************************************/
+
+#ifdef CONFIG_BINFMT_LOADABLE
+int binfmt_exit(FAR struct binary_s *bin);
 #endif
 
 #undef EXTERN
@@ -312,4 +374,4 @@ void nxflat_uninitialize(void);
 }
 #endif
 
-#endif /* __BINFMT_BINFMT_H */
+#endif /* __INCLUDE_NUTTX_BINFMT_BINFMT_H */
