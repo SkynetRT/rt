@@ -1,5 +1,5 @@
 include ../Make.defs
-SUBDIRS := clock semaphore timer irq env signal mqueue task thread crypto sched loader mem
+SUBDIRS := clock semaphore timer irq env signal mqueue task thread crypto sched
 LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a \
 	signal/signal.a mqueue/mqueue.a task/task.a thread/thread.a crypto/crypto.a sched/sched.a
 BUILD := ../build

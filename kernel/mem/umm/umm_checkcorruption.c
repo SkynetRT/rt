@@ -28,7 +28,7 @@
 
 #include <nuttx/mm/mm.h>
 
-#include "umm_heap/umm_heap.h"
+#include "umm_heap.h"
 
 /****************************************************************************
  * Public Functions
@@ -42,7 +42,5 @@
  *
  ****************************************************************************/
 
-void umm_checkcorruption(void)
-{
-  mm_checkcorruption(USR_HEAP);
-}
+// void umm_checkcorruption() { mm_checkcorruption(USR_HEAP); }
+

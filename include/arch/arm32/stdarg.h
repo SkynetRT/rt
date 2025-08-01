@@ -1,5 +1,5 @@
 /****************************************************************************
- * mm/umm_heap/umm_heapmember.c
+ * arch/arm/include/stdarg.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,37 +20,34 @@
  *
  ****************************************************************************/
 
+#ifndef __ARCH_ARM_INCLUDE_STDARG_H
+#define __ARCH_ARM_INCLUDE_STDARG_H
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
-#include <nuttx/config.h>
-
-#include <nuttx/mm/mm.h>
-
-#include "umm_heap.h"
+#ifdef __ghs__
+#  include <ansi/stdarg.h>
+#else
 
 /****************************************************************************
- * Public Functions
+ * Pre-processor Prototypes
  ****************************************************************************/
+
+/* This should work with any modern gcc (newer than 3.4 or so) */
+
+#define va_start(v,l)   __builtin_va_start(v,l)
+#define va_end(v)       __builtin_va_end(v)
+#define va_arg(v,l)     __builtin_va_arg(v,l)
+#define va_copy(d,s)    __builtin_va_copy(d,s)
 
 /****************************************************************************
- * Name: umm_heapmember
- *
- * Description:
- *   Check if an address lies in the user heap.
- *
- * Parameters:
- *   mem - The address to check
- *
- * Return Value:
- *   true if the address is a member of the user heap.  false if not
- *   not.  If the address is not a member of the user heap, then it
- *   must be a member of the user-space heap (unchecked)
- *
+ * Public Types
  ****************************************************************************/
 
-bool umm_heapmember(FAR void *mem)
-{
-  return mm_heapmember(USR_HEAP, mem);
-}
+typedef __builtin_va_list va_list;
+
+#endif
+
+#endif /* __ARCH_ARM_INCLUDE_STDARG_H */

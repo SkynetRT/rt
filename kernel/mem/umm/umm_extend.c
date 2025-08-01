@@ -28,7 +28,7 @@
 
 #include <nuttx/mm/mm.h>
 
-#include "umm_heap/umm_heap.h"
+#include "umm_heap.h"
 
 /****************************************************************************
  * Public Functions

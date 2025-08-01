@@ -80,6 +80,8 @@
  *
  ****************************************************************************/
 
+struct addrenv_s *oldenv;
+
 static inline int nxflat_bindrel32i(FAR struct nxflat_loadinfo_s *loadinfo,
                                     uint32_t offset)
 {
@@ -250,7 +252,7 @@ static inline int nxflat_gotrelocs(FAR struct nxflat_loadinfo_s *loadinfo)
    */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_select(loadinfo);
+  ret = nxflat_addrenv_select(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_select() failed: %d\n", ret);
@@ -350,7 +352,7 @@ static inline int nxflat_gotrelocs(FAR struct nxflat_loadinfo_s *loadinfo)
   /* Restore the original address environment */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_restore(loadinfo);
+  ret = nxflat_addrenv_restore(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_restore() failed: %d\n", ret);
@@ -409,7 +411,7 @@ static inline int nxflat_bindimports(FAR struct nxflat_loadinfo_s *loadinfo,
    */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_select(loadinfo);
+  ret = nxflat_addrenv_select(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_select() failed: %d\n", ret);
@@ -468,7 +470,7 @@ static inline int nxflat_bindimports(FAR struct nxflat_loadinfo_s *loadinfo,
             {
               berr("Exported symbol \"%s\" not found\n", symname);
 #ifdef CONFIG_ARCH_ADDRENV
-              nxflat_addrenv_restore(loadinfo);
+              nxflat_addrenv_restore(loadinfo, oldenv);
 #endif
               return -ENOENT;
             }
@@ -495,7 +497,7 @@ static inline int nxflat_bindimports(FAR struct nxflat_loadinfo_s *loadinfo,
   /* Restore the original address environment */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_restore(loadinfo);
+  ret = nxflat_addrenv_restore(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_restore() failed: %d\n", ret);
@@ -533,7 +535,7 @@ static inline int nxflat_clearbss(FAR struct nxflat_loadinfo_s *loadinfo)
    */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_select(loadinfo);
+  ret = nxflat_addrenv_select(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_select() failed: %d\n", ret);
@@ -549,7 +551,7 @@ static inline int nxflat_clearbss(FAR struct nxflat_loadinfo_s *loadinfo)
   /* Restore the original address environment */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_restore(loadinfo);
+  ret = nxflat_addrenv_restore(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_restore() failed: %d\n", ret);

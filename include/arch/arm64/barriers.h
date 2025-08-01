@@ -1,5 +1,5 @@
 /****************************************************************************
- * mm/umm_heap/umm_heapmember.c
+ * arch/arm64/include/barriers.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,37 +20,45 @@
  *
  ****************************************************************************/
 
+#ifndef ___ARCH_ARM64_INCLUDE_BARRIERS_H
+#define ___ARCH_ARM64_INCLUDE_BARRIERS_H
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
-#include <nuttx/config.h>
-
-#include <nuttx/mm/mm.h>
-
-#include "umm_heap.h"
+#ifndef __ASSEMBLY__
 
 /****************************************************************************
- * Public Functions
+ * Pre-processor Definitions
  ****************************************************************************/
 
-/****************************************************************************
- * Name: umm_heapmember
- *
- * Description:
- *   Check if an address lies in the user heap.
- *
- * Parameters:
- *   mem - The address to check
- *
- * Return Value:
- *   true if the address is a member of the user heap.  false if not
- *   not.  If the address is not a member of the user heap, then it
- *   must be a member of the user-space heap (unchecked)
- *
- ****************************************************************************/
+/* See Arm® Architecture Reference Manual
+ * ARM DDI 0487E.a C6.2.81
+ */
 
-bool umm_heapmember(FAR void *mem)
-{
-  return mm_heapmember(USR_HEAP, mem);
-}
+#define UP_DSB() __asm__ volatile ("dsb sy" : : : "memory");
+
+/* See Arm® Architecture Reference Manual
+ * ARM DDI 0487E.a C6.2.79
+ */
+
+#define UP_DMB() __asm__ volatile ("dmb sy" : : : "memory");
+
+/* See Arm® Architecture Reference Manual
+ * ARM DDI 0487E.a C6.2.96
+ */
+
+#define UP_ISB() __asm__ volatile ("isb" : : : "memory");
+
+#define UP_MB() \
+  do            \
+    {           \
+      UP_DSB(); \
+      UP_ISB(); \
+    }           \
+  while (0)
+
+#endif /* __ASSEMBLY__ */
+
+#endif /* ___ARCH_ARM64_INCLUDE_BARRIERS_H */

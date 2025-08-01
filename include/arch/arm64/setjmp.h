@@ -1,5 +1,5 @@
 /****************************************************************************
- * mm/umm_heap/umm_heapmember.c
+ * arch/arm64/include/setjmp.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,37 +20,73 @@
  *
  ****************************************************************************/
 
+#ifndef __ARCH_ARM64_INCLUDE_SETJUMP_H
+#define __ARCH_ARM64_INCLUDE_SETJUMP_H
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
 #include <nuttx/config.h>
+#include <nuttx/compiler.h>
 
-#include <nuttx/mm/mm.h>
-
-#include "umm_heap.h"
-
-/****************************************************************************
- * Public Functions
- ****************************************************************************/
+#include <sys/types.h>
 
 /****************************************************************************
- * Name: umm_heapmember
- *
- * Description:
- *   Check if an address lies in the user heap.
- *
- * Parameters:
- *   mem - The address to check
- *
- * Return Value:
- *   true if the address is a member of the user heap.  false if not
- *   not.  If the address is not a member of the user heap, then it
- *   must be a member of the user-space heap (unchecked)
- *
+ * Public Types
  ****************************************************************************/
 
-bool umm_heapmember(FAR void *mem)
+struct setjmp_buf_s
 {
-  return mm_heapmember(USR_HEAP, mem);
+  uint64_t x19;
+  uint64_t x20;
+  uint64_t x21;
+  uint64_t x22;
+  uint64_t x23;
+  uint64_t x24;
+  uint64_t x25;
+  uint64_t x26;
+  uint64_t x27;
+  uint64_t x28;
+  uint64_t x29;
+  uint64_t x30;
+  uint64_t x16;
+  uint64_t gap;
+
+#ifdef CONFIG_ARCH_FPU
+  float    q8;
+  float    q9;
+  float    q10;
+  float    q11;
+  float    q12;
+  float    q13;
+  float    q14;
+  float    q15;
+#endif
+};
+
+/* Traditional typedef for setjmp_buf */
+
+typedef struct setjmp_buf_s jmp_buf[1];
+
+/****************************************************************************
+ * Public Function Prototypes
+ ****************************************************************************/
+
+#ifdef __cplusplus
+#define EXTERN extern "C"
+extern "C"
+{
+#else
+#define EXTERN extern
+#endif
+
+int setjmp(jmp_buf env);
+void longjmp(jmp_buf env, int val) noreturn_function;
+
+#undef EXTERN
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* __ARCH_ARM64_INCLUDE_SETJUMP_H */

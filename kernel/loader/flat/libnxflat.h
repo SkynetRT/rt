@@ -88,7 +88,7 @@ int nxflat_addrenv_alloc(FAR struct nxflat_loadinfo_s *loadinfo,
  ****************************************************************************/
 
 #ifdef CONFIG_ARCH_ADDRENV
-#  define nxflat_addrenv_select(l) addrenv_select(&(l)->addrenv)
+#  define nxflat_addrenv_select(l,k) addrenv_select(&(l)->addrenv,k)
 #endif
 
 /****************************************************************************
@@ -107,7 +107,7 @@ int nxflat_addrenv_alloc(FAR struct nxflat_loadinfo_s *loadinfo,
  ****************************************************************************/
 
 #ifdef CONFIG_ARCH_ADDRENV
-#  define nxflat_addrenv_restore(l) addrenv_restore()
+#  define nxflat_addrenv_restore(l,k) addrenv_restore(k)
 #endif
 
 /****************************************************************************

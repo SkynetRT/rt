@@ -73,6 +73,8 @@
 
 int nxflat_load(struct nxflat_loadinfo_s *loadinfo)
 {
+  struct addrenv_s *oldenv;
+
   off_t    doffset;     /* Offset to .data in the NXFLAT file */
   uint32_t dreadsize;   /* Total number of bytes of .data to be read */
   uint32_t relocsize;   /* Memory needed to hold relocations */
@@ -159,7 +161,7 @@ int nxflat_load(struct nxflat_loadinfo_s *loadinfo)
    */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_select(loadinfo);
+  ret = nxflat_addrenv_select(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_select() failed: %d\n", ret);
@@ -185,7 +187,7 @@ int nxflat_load(struct nxflat_loadinfo_s *loadinfo)
   /* Restore the original address environment */
 
 #ifdef CONFIG_ARCH_ADDRENV
-  ret = nxflat_addrenv_restore(loadinfo);
+  ret = nxflat_addrenv_restore(loadinfo, oldenv);
   if (ret < 0)
     {
       berr("ERROR: nxflat_addrenv_restore() failed: %d\n", ret);
@@ -197,7 +199,7 @@ int nxflat_load(struct nxflat_loadinfo_s *loadinfo)
 
 errout:
 #ifdef CONFIG_ARCH_ADDRENV
-  nxflat_addrenv_restore(loadinfo);
+  nxflat_addrenv_restore(loadinfo, oldenv);
 #endif
   nxflat_unload(loadinfo);
   return ret;

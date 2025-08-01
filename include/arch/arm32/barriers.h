@@ -1,7 +1,5 @@
 /****************************************************************************
- * mm/umm_heap/umm_heapmember.c
- *
- * SPDX-License-Identifier: Apache-2.0
+ * arch/arm/include/barriers.h
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -20,37 +18,35 @@
  *
  ****************************************************************************/
 
+#ifndef __ARCH_ARM_INCLUDE_BARRIERS_H
+#define __ARCH_ARM_INCLUDE_BARRIERS_H
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
-#include <nuttx/config.h>
+#if defined(CONFIG_ARCH_ARMV7A)
+#  include <arch/armv7-a/barriers.h>
+#elif defined(CONFIG_ARCH_ARMV7R)
+#  include <arch/armv7-r/barriers.h>
+#elif defined(CONFIG_ARCH_ARMV8R)
+#  include <arch/armv8-r/barriers.h>
+#elif defined(CONFIG_ARCH_ARMV7M)
+#  include <arch/armv7-m/barriers.h>
+#elif defined(CONFIG_ARCH_ARMV8M)
+#  include <arch/armv8-m/barriers.h>
+#elif defined(CONFIG_ARCH_ARMV6M)
+#  include <arch/armv6-m/barriers.h>
+#else
+#  include <arch/arm/barriers.h>
+#endif
 
-#include <nuttx/mm/mm.h>
+#define UP_MB() \
+  do            \
+    {           \
+      UP_DSB(); \
+      UP_ISB(); \
+    }           \
+  while (0)
 
-#include "umm_heap.h"
-
-/****************************************************************************
- * Public Functions
- ****************************************************************************/
-
-/****************************************************************************
- * Name: umm_heapmember
- *
- * Description:
- *   Check if an address lies in the user heap.
- *
- * Parameters:
- *   mem - The address to check
- *
- * Return Value:
- *   true if the address is a member of the user heap.  false if not
- *   not.  If the address is not a member of the user heap, then it
- *   must be a member of the user-space heap (unchecked)
- *
- ****************************************************************************/
-
-bool umm_heapmember(FAR void *mem)
-{
-  return mm_heapmember(USR_HEAP, mem);
-}
+#endif /* __ARCH_ARM_INCLUDE_BARRIERS_H */

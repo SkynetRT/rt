@@ -31,7 +31,7 @@
 
 #include <nuttx/mm/gran.h>
 
-#include "mm_gran/mm_gran.h"
+#include "mm_gran.h"
 
 #ifdef CONFIG_GRAN
 

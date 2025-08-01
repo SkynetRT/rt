@@ -41,7 +41,7 @@
 #include <nuttx/clock.h>
 
 #include "sched/sched.h"
-#include "paging/paging.h"
+#include "paging.h"
 
 #ifdef CONFIG_LEGACY_PAGING
 

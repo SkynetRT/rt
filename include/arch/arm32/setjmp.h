@@ -1,5 +1,5 @@
 /****************************************************************************
- * mm/umm_heap/umm_heapmember.c
+ * arch/arm/include/setjmp.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,37 +20,81 @@
  *
  ****************************************************************************/
 
+#ifndef __ARCH_ARM_INCLUDE_SETJUMP_H
+#define __ARCH_ARM_INCLUDE_SETJUMP_H
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
 #include <nuttx/config.h>
-
-#include <nuttx/mm/mm.h>
-
-#include "umm_heap.h"
+#include <nuttx/compiler.h>
 
 /****************************************************************************
- * Public Functions
+ * Public Types
  ****************************************************************************/
 
-/****************************************************************************
- * Name: umm_heapmember
- *
- * Description:
- *   Check if an address lies in the user heap.
- *
- * Parameters:
- *   mem - The address to check
- *
- * Return Value:
- *   true if the address is a member of the user heap.  false if not
- *   not.  If the address is not a member of the user heap, then it
- *   must be a member of the user-space heap (unchecked)
- *
- ****************************************************************************/
-
-bool umm_heapmember(FAR void *mem)
+struct setjmp_buf_s
 {
-  return mm_heapmember(USR_HEAP, mem);
+  /* Note: core registers r0-r3 are caller-saved */
+
+  unsigned r4;
+  unsigned r5;
+  unsigned r6;
+  unsigned r7;
+  unsigned r8;
+  unsigned r9;
+  unsigned r10;
+  unsigned r11;
+  unsigned ip; /* this is really sp */
+  unsigned lr;
+
+#ifdef CONFIG_ARCH_FPU
+  /* note: FPU registers s0-s15 are caller-saved */
+
+  float    s16;
+  float    s17;
+  float    s18;
+  float    s19;
+  float    s20;
+  float    s21;
+  float    s22;
+  float    s23;
+  float    s24;
+  float    s25;
+  float    s26;
+  float    s27;
+  float    s28;
+  float    s29;
+  float    s30;
+  float    s31;
+
+  unsigned fpscr;
+#endif
+};
+
+/* Traditional typedef for setjmp_buf */
+
+typedef struct setjmp_buf_s jmp_buf[1];
+
+/****************************************************************************
+ * Public Function Prototypes
+ ****************************************************************************/
+
+#ifdef __cplusplus
+#define EXTERN extern "C"
+extern "C"
+{
+#else
+#define EXTERN extern
+#endif
+
+int setjmp(jmp_buf env);
+void longjmp(jmp_buf env, int val) noreturn_function;
+
+#undef EXTERN
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* __ARCH_ARM_INCLUDE_SETJUMP_H */

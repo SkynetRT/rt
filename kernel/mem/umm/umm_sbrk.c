@@ -35,7 +35,7 @@
 #include <nuttx/arch.h>
 #include <nuttx/pgalloc.h>
 
-#include "umm_heap/umm_heap.h"
+#include "umm_heap.h"
 
 /****************************************************************************
  * Public Functions

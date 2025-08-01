@@ -34,8 +34,8 @@
 #include <nuttx/bits.h>
 #include <nuttx/mm/gran.h>
 
-#include "mm_gran/mm_gran.h"
-#include "mm_gran/mm_grantable.h"
+#include "mm_gran.h"
+#include "mm_grantable.h"
 
 #ifdef CONFIG_GRAN
 

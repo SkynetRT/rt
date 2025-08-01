@@ -142,7 +142,7 @@ int nxflat_addrenv_alloc(FAR struct nxflat_loadinfo_s *loadinfo,
 
   memset(vdata, 0, envsize);
 
-  ret = addrenv_restore();
+  ret = addrenv_restore(oldenv);
   if (ret < 0)
     {
       berr("ERROR: addrenv_restore failed: %d\n", ret);
