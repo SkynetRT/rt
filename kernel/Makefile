@@ -4,12 +4,11 @@ LIBS := clock/clock.a semaphore/semaphore.a timer/timer.a irq/irq.a env/env.a \
 	signal/signal.a mqueue/mqueue.a task/task.a thread/thread.a crypto/crypto.a sched/sched.a
 BUILD := ../build
 TARGET := $(BUILD)/libraries/kernel.a
-BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS)) $(BUILD)/libraries/loader.a $(BUILD)/libraries/mem.a
+BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS))
 .PHONY: all
 all: $(TARGET)
 $(TARGET): $(BUILD)/libraries/loader.a $(BUILD)/libraries/mem.a $(LIBS)
-	@for lib in $(BLIBS); do $(AR) -x $$lib; mv *.o $(BUILD)/kernel; done
-	$(AR) rcs $@ $(BUILD)/kernel/*.o
+	$(AR) rcs $@ $(BUILD)/kernel/*.o $(BUILD)/mem/*.o $(BUILD)/loader/*.o
 $(BUILD)/libraries/loader.a:
 	$(MAKE) -C loader
 $(BUILD)/libraries/mem.a:
