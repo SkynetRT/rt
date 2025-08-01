@@ -1,6 +1,8 @@
 
 menu "Memory Manager"
 
+include "kernel/mem/iob/Kconfig"
+
 choice
 	prompt "Build heap manager"
 	default MM_DEFAULT_MANAGER

@@ -132,7 +132,8 @@ int nxflat_addrenv_alloc(FAR struct nxflat_loadinfo_s *loadinfo,
    * selected the D-Space address environment to do this.
    */
 
-  ret = addrenv_select(&loadinfo->addrenv);
+  struct addrenv_s *oldenv;
+  ret = addrenv_select(&loadinfo->addrenv, &oldenv);
   if (ret < 0)
     {
       berr("ERROR: addrenv_select failed: %d\n", ret);
@@ -157,7 +158,7 @@ int nxflat_addrenv_alloc(FAR struct nxflat_loadinfo_s *loadinfo,
 
 errout_with_addrenv:
   up_addrenv_destroy(&loadinfo->addrenv);
-  loadinfo->addrenv = 0;
+  memset(&loadinfo->addrenv, 0, sizeof(struct addrenv_s));
 
 errout_with_dspace:
   kmm_free(dspace);
@@ -211,13 +212,13 @@ void nxflat_addrenv_free(FAR struct nxflat_loadinfo_s *loadinfo)
 #ifdef CONFIG_ARCH_ADDRENV
       /* Destroy the address environment */
 
-      ret = up_addrenv_destroy(loadinfo->addrenv);
+      ret = up_addrenv_destroy(&loadinfo->addrenv);
       if (ret < 0)
         {
           berr("ERROR: up_addrenv_destroy failed: %d\n", ret);
         }
 
-      loadinfo->addrenv = 0;
+      memset(&loadinfo->addrenv, 0, sizeof(struct addrenv_s));
 #else
       /* Free the allocated D-Space region */
 

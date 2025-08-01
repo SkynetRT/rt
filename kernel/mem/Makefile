@@ -1,6 +1,6 @@
 include ../../Make.defs
-SUBDIRS := heap
-LIBS := heap/heap.a
+SUBDIRS := heap iob shm kmm
+LIBS := heap/heap.a iob/iob.a shm/shm.a kmm/kmm.a
 BUILD := ../../build
 TARGET := $(BUILD)/libraries/mem.a
 BLIBS := $(pathsubst %, $(BUILD)/libraries/%.a, $(SUBDIRS))
