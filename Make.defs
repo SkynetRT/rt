@@ -4,4 +4,5 @@ CC = arm-none-eabi-gcc
 ARM32	= -march=armv7-a
 ARM64	= -march=armv8-a
 INC = ../..
-CFLAGS	= $(ARM32) -Wall -I$(INC)/include -nostdinc
+CFLAGS	= $(ARM32) -Wall -I$(INC)/include -nostdinc -std=c99
+
