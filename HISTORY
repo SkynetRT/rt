@@ -3,3 +3,4 @@
 2025-07-26 Compiled first RT module: semaphore
 2025-07-30 Compiled almost full RT: clock, timer, irq, env, signal, mqueue, task, thread, crypto
 2026-07-31 HAL Spec Definition (CHIPS/BOARDS). New compiled RT module: sched
+2026-08-01 Kernel Compiled: kernel.a
