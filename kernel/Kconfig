@@ -1,6 +1,11 @@
 comment "Kernel:"
 
+source "kernel/clock/Kconfig"
 source "kernel/crypto/Kconfig"
 source "kernel/loader/Kconfig"
 source "kernel/mem/Kconfig"
 source "kernel/sched/Kconfig"
+source "kernel/mqueue/Kconfig"
+source "kernel/thread/Kconfig"
+source "kernel/signal/Kconfig"
+source "kernel/task/Kconfig"

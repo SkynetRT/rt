@@ -1,0 +1,535 @@
+menu "Tasks and Scheduling"
+
+config SPINLOCK
+	bool "Support Spinlocks"
+	default n
+	---help---
+		Enables support for spinlocks.  Spinlocks are used primarily for
+		synchronization in SMP configurations but are available for general
+		synchronization between CPUs.  Use in a single CPU configuration would
+		most likely be fatal.  Note, however, that this does not depend on
+		CONFIG_ARCH_HAVE_MULTICPU.  This permits the use of spinlocks in
+		other novel architectures.
+
+if SPINLOCK
+
+config TICKET_SPINLOCK
+	bool "Use ticket Spinlocks"
+	default n
+	---help---
+		Use ticket spinlock algorithm.
+
+config RW_SPINLOCK
+	bool "Support read-write Spinlocks"
+	default n
+	---help---
+		Spinlocks are spilit into read and write lock.
+		Reader can take read lock simultaneously and only one writer
+		can take write lock.
+
+endif # SPINLOCK
+
+config IRQCHAIN
+	bool "Enable multi handler sharing a IRQ"
+	default n
+	---help---
+		Enable support for IRQCHAIN.
+
+if IRQCHAIN
+
+config PREALLOC_IRQCHAIN
+	int "Number of pre-allocated irq chains"
+	default 4 if DEFAULT_SMALL
+	default 8 if !DEFAULT_SMALL
+	---help---
+		The number of pre-allocated irq chain structures.  The system manages
+		a pool of preallocated irq chain structures to minimize dynamic
+		allocations.  You will, however, get better performance and memory
+		usage if this value is tuned to minimize such allocations.
+
+endif # IRQCHAIN
+
+config IRQ_NWORKS
+	int "Max num of active irq wqueue"
+	default 8
+	---help---
+		The max num of active irq wqueue.
+
+config IRQ_WORK_SECTION
+	string "The section where irq stack is located"
+	---help---
+		The section where irq stack is located.
+
+config IRQ_WORK_STACKSIZE
+	int "The default stack size for isr wqueue"
+	default DEFAULT_TASK_STACKSIZE
+	---help---
+		The default stack size for isr wqueue.
+
+config IRQCOUNT
+	bool
+	default n
+
+config SMP
+	bool "Symmetric Multi-Processing (SMP)"
+	default n
+	depends on ARCH_HAVE_MULTICPU
+	depends on ARCH_HAVE_TESTSET
+	depends on ARCH_INTERRUPTSTACK != 0
+	select SPINLOCK
+	select IRQCOUNT
+	---help---
+		Enables support for Symmetric Multi-Processing (SMP) on a multi-CPU
+		platform.
+
+		N.B. SMP mode requires the use of ARCH_INTERRUPTSTACK:
+
+		CPU0 thread0  ->  IRQ enter -> add thread0 to block_list -> IRQ leave(crash)
+		                                                        ||
+		                                                        /\
+		                                                       /  \
+		CPU1 thread1  ->  block_task -> take thread0 from block_list -> run thread0
+
+		CPU0 IRQ handler use thread0's stack, but thread0 may switch to CPU1, that
+		will caused IRQ handler stack corruption.
+
+if SMP
+
+config SMP_NCPUS
+	int "Number of CPUs"
+	default 4
+	range 1 32
+	---help---
+		This value identifies the number of CPUs supported by the processor
+		that will be used for SMP.
+
+		If CONFIG_DEBUG_FEATURES is enabled, then the value one is permitted
+		for CONFIG_SMP_NCPUS.  This is not normally a valid setting for an
+		SMP configuration.  However, running the SMP logic in a single CPU
+		configuration is useful during certain testing.
+
+config SMP_DEFAULT_CPUSET
+	hex "Default CPU bit set"
+	default 0xffffffff
+	---help---
+		Set the Default CPU bits. The way to use the unset CPU is to call the
+		sched_setaffinity function to bind a task to the CPU. bit0 means CPU0.
+
+endif # SMP
+
+choice
+	prompt "Initialization Task"
+	default INIT_ENTRY if !BUILD_KERNEL
+	default INIT_FILE if !BINFMT_DISABLE
+	default INIT_NONE if BINFMT_DISABLE
+
+config INIT_NONE
+	bool "None"
+
+config INIT_ENTRY
+	bool "Via application entry"
+	depends on !BUILD_KERNEL
+
+config INIT_FILE
+	bool "Via executable file"
+	depends on !BINFMT_DISABLE
+
+endchoice # Initialization task
+
+config INIT_ARGS
+	string "Application argument list"
+	depends on !INIT_NONE
+	---help---
+		The argument list for user applications. e.g.:
+		  "\"arg1\",\"arg2\",\"arg3\""
+
+config INIT_STACKSIZE
+	int "Main thread stack size"
+	default DEFAULT_TASK_STACKSIZE
+	---help---
+		The size of the stack to allocate for the user initialization thread
+		that is started as soon as the OS completes its initialization.
+
+config INIT_PRIORITY
+	int "init thread priority"
+	default 100
+	---help---
+		The priority of the user initialization thread.
+
+if INIT_ENTRY
+config INIT_ENTRYPOINT
+	string "Application entry point"
+	default "main"
+	---help---
+		The name of the entry point for user applications.  For the example
+		applications this is of the form 'app_main' where 'app' is the application
+		name. If not defined, INIT_ENTRYPOINT defaults to "main".
+
+		Note that main must take "argc" and "argv" arguments:
+
+		int main(int argc, FAR char *argv[])
+
+		Otherwise, if using a signature such as "int main(void)" a compilation
+		error will result:
+
+		> $ make
+		> CC:  CustomHello.c <command-line>: error: conflicting types for
+		> 'custom_hello_main'
+		> CustomHello.c:3:5: note: in expansion of macro 'main'
+		>     3 | int main(void)
+		>       |     ^~~~
+
+config INIT_ENTRYNAME
+	string "Application entry name"
+	default INIT_ENTRYPOINT
+
+endif # INIT_ENTRY
+
+if INIT_FILE
+
+config INIT_FILEPATH
+	string "Application initialization path"
+	default "/bin/init"
+	---help---
+		The name of the entry point for user applications.  For the example
+		applications this is of the form 'app_main' where 'app' is the application
+		name. If not defined, INIT_ENTRYPOINT defaults to "main".
+
+config INIT_SYMTAB
+	string "Symbol table"
+	default "NULL" if !EXECFUNCS_HAVE_SYMTAB
+	default EXECFUNCS_SYMTAB_ARRAY if EXECFUNCS_HAVE_SYMTAB
+	depends on BUILD_FLAT
+	---help---
+		The name of other global array that holds the exported symbol table.
+		The special string "NULL" may be provided if there is no symbol
+		table.  Quotation marks will be stripped when config.h is generated.
+
+		NOTE: This setting cannot be used in protected or kernel builds.
+		Any kernel mode symbols tables would not be usable for resolving
+		symbols in user mode executables.
+
+config INIT_NEXPORTS
+	string "Symbol table size"
+	default "0" if !EXECFUNCS_HAVE_SYMTAB
+	default EXECFUNCS_NSYMBOLS_VAR if EXECFUNCS_HAVE_SYMTAB
+	depends on BUILD_FLAT
+	---help---
+		The size of the symbol table.  NOTE that is is logically a numeric
+		value but is represent by a string.  That allows you to put
+		sizeof(something) or a macro or a global variable name for the
+		symbol table size.  Quotation marks will be stripped when config.h
+		is generated.
+
+		NOTE: This setting cannot be used in protected or kernel builds.
+		Any kernel mode symbols tables would not be usable for resolving
+		symbols in user mode executables.
+
+menuconfig INIT_MOUNT
+	bool "Auto-mount init file system"
+	default n
+	depends on !DISABLE_MOUNTPOINT
+	---help---
+		In order to use the the initial startup program when CONFIG_INIT_FILEPATH
+		is provided, it is necessary to mount the initial file system that
+		provides init program.  Normally this mount is done in the board-specific
+		initialization logic.  However, if the mount is very simple, it can be
+		performed by the OS bring-up logic itself by selecting this option.
+
+if INIT_MOUNT
+
+config INIT_MOUNT_SOURCE
+	string "The block device to mount"
+	default "/dev/ram0"
+
+config INIT_MOUNT_TARGET
+	string "Path to the mounted file system"
+	default "/bin"
+
+config INIT_MOUNT_FSTYPE
+	string "The file system type to mount"
+	default "romfs"
+
+config INIT_MOUNT_FLAGS
+	hex "Flags passed to mount"
+	default 0
+
+config INIT_MOUNT_DATA
+	string "Additional data passed to mount"
+	default ""
+
+endif # INIT_MOUNT
+endif # INIT_FILE
+
+menuconfig ETC_ROMFS
+	bool "Auto-mount etc baked-in ROMFS image"
+	default n
+	depends on !DISABLE_MOUNTPOINT && FS_ROMFS
+	---help---
+		Mount a ROMFS filesystem at /etc and provide a system init
+		script at /etc/init.d/rc.sysinit and a startup script
+		at /etc/init.d/rcS.  The default system init script will mount
+		a FAT FS RAMDISK at /tmp but the logic is easily extensible.
+
+if ETC_ROMFS
+
+config ETC_CROMFS
+	bool "Support CROMFS (compressed) start-up script"
+	default n
+	depends on FS_CROMFS
+	---help---
+		Mount a CROMFS filesystem at /etc and provide a compressed system
+		init script at /etc/init.d/rc.sysinit and a startup script
+		at /etc/init.d/rcS.
+
+config ETC_ROMFSMOUNTPT
+	string "Mountpoint of the etc romfs image"
+	default "/etc"
+
+config ETC_ROMFSDEVNO
+	int "ROMFS block device minor number"
+	default 0
+	---help---
+		This is the minor number of the ROMFS block device.  The default is
+		'0' corresponding to /dev/ram0.
+
+config ETC_ROMFSSECTSIZE
+	int "ROMFS sector size"
+	default 64
+	---help---
+		This is the sector size to use with the ROMFS volume.  Since the
+		default volume is very small, this defaults to 64 but should be
+		increased if the ROMFS volume were to be become large.  Any value
+		selected must be a power of 2.
+
+config ETC_FATDEVNO
+	int "FAT block device minor number"
+	default 1
+	depends on FS_FAT
+	---help---
+		When the default rcS file used when ETC_ROMFS is selected, it
+		will mount a FAT FS under /tmp. This is the minor number of the FAT
+		FS block device.  The default is '1' corresponding to /dev/ram1.
+
+config ETC_FATSECTSIZE
+	int "FAT sector size"
+	default 512
+	depends on FS_FAT
+	---help---
+		When the default rcS file used when ETC_ROMFS is selected, it
+		will mount a FAT FS under /tmp. This is the sector size use with the
+		FAT FS. Default is 512.
+
+config ETC_FATNSECTORS
+	int "FAT number of sectors"
+	default 1024
+	depends on FS_FAT
+	---help---
+		When the default rcS file used when ETC_ROMFS is selected, it
+		will mount a FAT FS under /tmp. This is the number of sectors to use
+		with the FAT FS.  Default is 1024.  The amount of memory used by the
+		FAT FS will be ETC_FATSECTSIZE * ETC_FATNSECTORS bytes.
+
+config ETC_FATMOUNTPT
+	string "FAT mount point"
+	default "/tmp"
+	depends on FS_FAT
+	---help---
+		When the default rcS file used when ETC_ROMFS is selected, it
+		will mount a FAT FS under /tmp. This is the location where the FAT
+		FS will be mounted.  Default is "/tmp".
+
+endif # ETC_ROMFS
+
+config RR_INTERVAL
+	int "Round robin timeslice (MSEC)"
+	default 0
+	---help---
+		The round robin timeslice will be set this number of milliseconds;
+		Round robin scheduling (SCHED_RR) is enabled by setting this
+		interval to a positive, non-zero value.
+
+config SCHED_SPORADIC
+	bool "Support sporadic scheduling"
+	default n
+	select SCHED_SUSPENDSCHEDULER
+	select SCHED_RESUMESCHEDULER
+	---help---
+		Build in additional logic to support sporadic scheduling
+		(SCHED_SPORADIC).
+
+if SCHED_SPORADIC
+
+config SCHED_SPORADIC_MAXREPL
+	int "Maximum number of replenishments"
+	default 3
+	range 1 255
+	---help---
+		Controls the size of allocated replenishment structures and, hence,
+		also limits the maximum number of replenishments.
+
+config SPORADIC_INSTRUMENTATION
+	bool "Sporadic scheduler monitor hooks"
+	default n
+	---help---
+		Enables instrumentation in the sporadic scheduler to monitor
+		scheduler behavior. If enabled, then the board-specific logic must
+		provide the following functions:
+
+			void arch_sporadic_start(FAR struct tcb_s *tcb);
+			void arch_sporadic_lowpriority(FAR struct tcb_s *tcb);
+			void arch_sporadic_suspend(FAR struct tcb_s *tcb);
+			void arch_sporadic_resume(FAR struct tcb_s *tcb);
+
+endif # SCHED_SPORADIC
+
+config TASK_NAME_SIZE
+	int "Maximum task name size"
+	default 31
+	---help---
+		Specifies the maximum size of a task name to save in the TCB.
+		Useful if scheduler instrumentation is selected.  Set to zero to
+		disable.  Excludes the NUL terminator; the actual allocated size
+		will be TASK_NAME_SIZE + 1.  The default of 31 then results in
+		a align-able 32-byte allocation.
+
+config SCHED_HAVE_PARENT
+	bool "Support parent/child task relationships"
+	default n
+	---help---
+		Remember the ID of the parent task when a new child task is
+		created.  This support enables some additional features (such as
+		SIGCHLD) and modifies the behavior of other interfaces.  For
+		example, it makes waitpid() more standards complete by restricting
+		the waited-for tasks to the children of the caller. Default:
+		disabled.
+
+config SCHED_CHILD_STATUS
+	bool "Retain child exit status"
+	default n
+	depends on SCHED_HAVE_PARENT
+	---help---
+		If this option is selected, then the exit status of the child task
+		will be retained after the child task exits.  This option should be
+		selected if you require knowledge of a child process's exit status.
+		Without this setting, wait(), waitpid() or waitid() may fail.  For
+		example, if you do:
+
+		1) Start child task
+		2) Wait for exit status (using wait(), waitpid(), or waitid()).
+
+		This can fail because the child task may run to completion before
+		the wait begins.  There is a non-standard work-around in this case:
+		The above sequence will work if you disable pre-emption using
+		sched_lock() prior to starting the child task, then re-enable pre-
+		emption with sched_unlock() after the wait completes.  This works
+		because the child task is not permitted to run until the wait is in
+		place.
+
+		The standard solution would be to enable SCHED_CHILD_STATUS.  In
+		this case the exit status of the child task is retained after the
+		child exits and the wait will successful obtain the child task's
+		exit status whether it is called before the child task exits or not.
+
+		Warning:  If you enable this feature, then your application must
+		either (1) take responsibility for reaping the child status with wait(),
+		waitpid(), or waitid(), or (2) suppress retention of child status.
+		If you do not reap the child status, then you have a memory leak and
+		your system will eventually fail.
+
+		Retention of child status can be suppressed on the parent using logic like:
+
+			struct sigaction sa;
+
+			sa.sa_handler = SIG_IGN;
+			sa.sa_flags = SA_NOCLDWAIT;
+			int ret = sigaction(SIGCHLD, &sa, NULL);
+
+if SCHED_CHILD_STATUS
+
+config PREALLOC_CHILDSTATUS
+	int "Number of pre-allocated child status"
+	default 0
+	---help---
+		To prevent runaway child status allocations and to improve
+		allocation performance, child task exit status structures are pre-
+		allocated when the system boots.  This setting determines the number
+		of child status structures that will be pre-allocated.
+
+		However, the number of child status structures may need to be
+		significantly larger because this number includes the maximum number
+		of tasks that are running PLUS the number of tasks that have exit'ed
+		without having their exit status reaped (via wait(), waitid(), or
+		waitpid()).
+
+		Obviously, if tasks spawn children indefinitely and never have the
+		exit status reaped, then you may have a memory leak!  If you enable
+		the SCHED_CHILD_STATUS feature, then your application must take
+		responsibility for either (1) reaping the child status with wait(),
+		waitpid(), or waitid() or it must (2) suppress retention of child
+		status.  Otherwise, your system will eventually fail.
+
+		Retention of child status can be suppressed on the parent using logic like:
+
+			struct sigaction sa;
+
+			sa.sa_handler = SIG_IGN;
+			sa.sa_flags = SA_NOCLDWAIT;
+			int ret = sigaction(SIGCHLD, &sa, NULL);
+
+config DEBUG_CHILDSTATUS
+	bool "Enable Child Status Debug Output"
+	default n
+	depends on SCHED_CHILD_STATUS && DEBUG_FEATURES
+	---help---
+		Very detailed... I am sure that you do not want this.
+
+endif # SCHED_CHILD_STATUS
+
+config SCHED_WAITPID
+	bool "Enable waitpid() API"
+	default n
+	depends on SCHED_HAVE_PARENT || !BUILD_KERNEL
+	---help---
+		Enables the waitpid() interface in a default, non-standard mode
+		(non-standard in the sense that the waited for PID need not be child
+		of the caller).  If SCHED_HAVE_PARENT is also defined, then this
+		setting will modify the behavior or waitpid() (making more spec
+		compliant) and will enable the waitid() and wait() interfaces as
+		well. Note that SCHED_HAVE_PARENT must be defined in BUILD_KERNEL if
+		SCHED_WAITPID is needed.
+
+config SCHED_DUMP_LEAK
+	bool "Enable catch task memory leak"
+	default n
+	---help---
+		When this option is enabled, the task's outstanding memory allocations
+		are printed using syslog. This helps catch any memory allocated by the
+		task that remains unreleased when the task exits.
+
+config SCHED_DUMP_ON_EXIT
+	bool "Dump all tasks state on exit"
+	default n
+	---help---
+		Dump all tasks state on exit()
+
+config SCHED_USER_IDENTITY
+	bool "Support per-task User Identity"
+	default n
+	---help---
+		This selection enables functionality of getuid(), setuid(), getgid(),
+		setgid().  If this option is not selected, then stub, root-only
+		versions of these interfaces are available.  When selected, these
+		interfaces will associate a UID and/or GID with each task group.
+		Those can then be managed using the interfaces.  Child tasks will
+		inherit the UID and GID of its parent.
+
+config SCHED_THREAD_LOCAL
+	bool "Support __thread/thread_local keyword"
+	default n
+	depends on ARCH_HAVE_THREAD_LOCAL
+	---help---
+		This option enables architecture-specific TLS support (__thread/thread_local keyword)
+		Note: Toolchain must be compiled with '--enable-tls' enabled
+
+endmenu # Tasks and Scheduling
