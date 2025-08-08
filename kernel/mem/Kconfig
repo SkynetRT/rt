@@ -1,7 +1,7 @@
 
 menu "Memory Manager"
 
-include "kernel/mem/iob/Kconfig"
+source "kernel/mem/iob/Kconfig"
 
 choice
 	prompt "Build heap manager"
